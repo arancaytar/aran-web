@@ -1,6 +1,8 @@
+@import "colors.css.scss";
+
 body {
-  background-color: #fbc547;
-  color: #333;
+  background-color: $color-blue-medium;
+  color: $color-grey-light;
   font-family: -apple-system, BlinkMacSystemFont, "Avenir Next", "Avenir",
     "Segoe UI", "Lucida Grande", "Helvetica Neue", "Helvetica", "Fira Sans",
     "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu",
@@ -10,15 +12,10 @@ body {
 }
 
 a {
-  color: rgba(#000, 0.7);
+  color: $color-yellow;
 
   &:focus,
   &:hover {
-    color: rgba(#000, 0.6);
+    color: #0ff;
   }
-}
-
-.middleman-logo {
-  margin-bottom: 1rem;
-  width: 10rem;
 }

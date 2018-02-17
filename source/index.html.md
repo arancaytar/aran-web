@@ -6,5 +6,5 @@ world Ermarian (hence the name).
 It is also my personal home page, and the repository of many small utilities
 and resources I have created over the years.
 
-In its current incarnation, the Ermarian Network is built using the static site
-generator Hugo.
+In its current incarnation, the Ermarian Network is built using the static
+site generator Middleman.

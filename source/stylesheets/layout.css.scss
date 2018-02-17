@@ -9,6 +9,11 @@ div.page {
 
   header.page-header {
     grid-area: header;
+
+    div.page-logo, h1.page-title {
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
   article.content {
     grid-area: content;

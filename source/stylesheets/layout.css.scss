@@ -1,0 +1,22 @@
+div.page {
+  display: grid;
+  grid-template-areas:
+    "header"
+    "nav"
+    "content"
+    "footer";
+  grid-gap: 20px;
+
+  header.page-header {
+    grid-area: header;
+  }
+  article.content {
+    grid-area: content;
+  }
+  nav.page-nav {
+    grid-area: nav;
+  }
+  footer.page-footer {
+    grid-area: footer;
+  }
+}

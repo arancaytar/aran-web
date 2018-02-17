@@ -1,4 +1,5 @@
 @import "colors.css.scss";
+@import "layout.css.scss";
 
 body {
   background-color: $color-blue-medium;
@@ -8,7 +9,6 @@ body {
     "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu",
     "Franklin Gothic Medium", "Century Gothic", "Liberation Sans", sans-serif;
   padding: 18vh 1rem;
-  text-align: center;
 }
 
 a {

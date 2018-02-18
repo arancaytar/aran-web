@@ -1,3 +1,14 @@
+<% links = [
+  { :url => '/', :name => 'Home' },
+  { :url => '/about/', :name => 'About' }
+] %>
 <nav class="page-nav">
-
+  <ul class="navbar">
+    <% links.each do |link| %>
+    <% active = link[:url] == current_page.url %>
+    <li>
+      <%= link_to(link[:name], link[:url], class: (active ? 'active' : '')) %>
+    </li>
+    <% end %>
+  </ul>
 </nav>

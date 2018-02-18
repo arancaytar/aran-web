@@ -13,9 +13,29 @@ body {
 
 a {
   color: $color-yellow;
+  text-decoration: none;
 
   &:focus,
   &:hover {
     color: #0ff;
+  }
+}
+
+ul.navbar {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+
+  li {
+    background: $color-blue-dark;
+    border: 1px solid $color-blue-light;
+    padding: 5px;
+    display: inline-block;
+
+    a.active {
+      color: white;
+      font-weight: bold;
+      cursor: default;
+    }
   }
 }

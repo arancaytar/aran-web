@@ -9,11 +9,10 @@ div.page {
 
   header.page-header {
     grid-area: header;
-
-    div.page-logo, h1.page-title {
-      display: inline-block;
-      vertical-align: middle;
-    }
+  }
+  div.page-logo, h1.page-title {
+    display: inline-block;
+    vertical-align: middle;
   }
   article.content {
     grid-area: content;
@@ -23,5 +22,20 @@ div.page {
   }
   footer.page-footer {
     grid-area: footer;
+  }
+
+  @media (max-width: 600px) {
+    h1.page-title {
+      font-size: 7vw;
+    }
+  }
+
+  @media (max-width: 300px) {
+    div.page-logo {
+      display: none;
+    }
+    h1.page-title {
+      font-size: 2em;
+    }
   }
 }

@@ -25,14 +25,3 @@ div.page {
     grid-area: footer;
   }
 }
-
-@media (max-width: 400px) {
-  h1.page-title {
-    font-size: 30px;
-  }
-}
-@media (max-width: 380px) {
-  h1.page-title {
-    font-size: 28px;
-  }
-}

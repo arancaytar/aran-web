@@ -14,10 +14,19 @@ of their satellites:
 - [NationStates](https://www.nationstates.net/) (2004 to now)
 - [Santharia](http://www.santharia.com/) (2003 to 2006)
 
-Main interests:
+## Main interests
 
 - All kinds of programming languages. My current favorites are Python and PHP,
   but I've dabbled in Java, JS and Haskell, and occasionally touched Lua and Ruby.
 - Logic and computational complexity, my main focus while studying computer science.
 - I'm trying to pick up the basics of Machine Learning.
 - Ponies.
+
+## Contact
+
+- I can be reached by email at [aran@ermarian.net](mailto: Aran <aran@ermarian.net>).
+  (I used to recommend my PGP key at this point, but frankly I am no longer
+  convinced it's a [worthwhile security measure](/about/security).)
+- I am active on Twitter as [@arancaytar](https://twitter.com/arancaytar).
+- I have a GitHub account at [@arancaytar](https://github.com/arancaytar), but
+  as most of my dev work so far has been under another identity, it's very empty.

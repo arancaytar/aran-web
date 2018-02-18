@@ -1,3 +1,8 @@
 <article class="content">
+  <% if current_page.data.title %>
+  <header>
+    <h1 class="content-title"><%= current_page.data.title %></h1>
+  </header>
+  <% end %>
   <%= content %>
 </article>

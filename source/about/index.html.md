@@ -12,7 +12,7 @@ of their satellites:
 - [CalRef](https://calref.net) (2012 to now)
 - [Spiderweb Software](https://spiderwebforums.ipbhost.com/) (2003 to now)
 - [NationStates](https://www.nationstates.net/) (2004 to now)
-- [Santharia](https://www.santharia.com/) (2003 to 2006)
+- [Santharia](http://www.santharia.com/) (2003 to 2006)
 
 Main interests:
 

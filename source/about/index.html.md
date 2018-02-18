@@ -2,9 +2,9 @@
 title: About
 ---
 I'm Aran, sometimes known as Arancaytar. I do a lot of stuff with websites,
-mostly using PHP and Drupal. I currently live and work in Zurich, Switzerland,
-and have previously spent most of my life in Germany (studying in Aachen,
-Frankfurt and Berlin).
+mostly using [PHP](https://www.php.net/) and [Drupal](https://www.drupal.org/).
+I currently live and work in Zurich, Switzerland, and have previously spent most
+of my life in Germany (studying in Aachen, Frankfurt and Berlin).
 
 I have been (or still am) active in the following online communities, and some
 of their satellites:

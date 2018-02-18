@@ -20,7 +20,7 @@ of their satellites:
   but I've dabbled in Java, JS and Haskell, and occasionally touched Lua and Ruby.
 - Logic and computational complexity, my main focus while studying computer science.
 - I'm trying to pick up the basics of Machine Learning.
-- Ponies.
+- [Ponies](https://www.fimfiction.net/).
 
 ## Contact
 

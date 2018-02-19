@@ -47,6 +47,30 @@ ul.navbar {
 .box {
   border: 1px solid $color-blue-light;
   background: $color-blue-dark;
-  padding: 1em;
+  padding: 10px;
   border-radius: 0.5em;
+}
+
+button {
+  border: 1px solid $color-blue-light;
+  background: $color-blue-dark;
+  padding: 10px;
+  border-radius: 0.5em;
+  color: white;
+  outline: none;
+
+  &:disabled {
+    color: $color-grey-medium;
+    background: $color-grey-dark;
+    border-color: $color-grey-medium;
+  }
+
+  &:active {
+    background: $color-blue-light;
+  }
+}
+
+fieldset {
+  border: none;
+  text-align: center;
 }

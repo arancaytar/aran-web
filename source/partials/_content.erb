@@ -1,7 +1,7 @@
-<article class="content box">
+<article class="content <%= current_page.data.forms ? '' : 'box' %>">
   <% if current_page.data.title %>
   <header>
-    <h1 class="content-title"><%= current_page.data.title %></h1>
+    <h1 class="content-title <%= current_page.data.forms ? 'box' : '' %>"><%= current_page.data.title %></h1>
   </header>
   <% end %>
   <%= content %>

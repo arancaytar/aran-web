@@ -2,14 +2,28 @@ body {
   padding: 9vh 1rem;
 }
 
+h1.content-title {
+  margin: 0;
+
+  &.box {
+    padding: 10px;
+  }
+}
+
 div.page {
   display: grid;
 
   grid-template-areas:
-    "... header header ..."
-    "... nav content ..."
-    "... ... content ..."
-    "... ... footer ...";
+    "header header"
+    "nav content"
+    "... content"
+    "... footer";
+  grid-template-columns: auto 1fr;
+  grid-template-rows:
+    auto
+    auto
+    1fr
+    auto;
   grid-gap: 20px;
 
   header.page-header {
@@ -64,4 +78,3 @@ div.page {
       "content"
       "footer";
   }
-

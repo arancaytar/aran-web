@@ -8,7 +8,6 @@ body {
     "Segoe UI", "Lucida Grande", "Helvetica Neue", "Helvetica", "Fira Sans",
     "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu",
     "Franklin Gothic Medium", "Century Gothic", "Liberation Sans", sans-serif;
-  padding: 18vh 1rem;
 }
 
 a {
@@ -19,6 +18,16 @@ a {
   &:hover {
     color: #0ff;
   }
+
+  &.mail, &[href^="mailto:"] {
+    background: url(/images/icons/mail.png) center right no-repeat;
+    padding-right: 20px;
+  }
+
+  &.external, &[href^="http:"], &[href^="https:"] {
+    background:url(/images/icons/external.png) center right no-repeat;
+    padding-right:13px;
+  }
 }
 
 ul.navbar {
@@ -27,15 +36,17 @@ ul.navbar {
   margin: 0;
 
   li {
-    background: $color-blue-dark;
-    border: 1px solid $color-blue-light;
-    padding: 5px;
-    display: inline-block;
-
     a.active {
       color: white;
       font-weight: bold;
       cursor: default;
     }
   }
+}
+
+.box {
+  border: 1px solid $color-blue-light;
+  background: $color-blue-dark;
+  padding: 1em;
+  border-radius: 0.5em;
 }

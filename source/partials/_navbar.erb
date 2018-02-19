@@ -2,7 +2,7 @@
   { :url => '/', :name => 'Home' },
   { :url => '/about/', :name => 'About' }
 ] %>
-<nav class="page-nav">
+<nav class="page-nav box">
   <ul class="navbar">
     <% links.each do |link| %>
     <% active = link[:url] == current_page.url %>

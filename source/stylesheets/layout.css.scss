@@ -31,39 +31,22 @@ div.page {
   footer.page-footer {
     grid-area: footer;
   }
-
-  @media (max-width: 300px) {
-    div.page-logo {
-      display: none;
-    }
-    h1.page-title {
-      font-size: 2em;
-    }
-  }
 }
 
   @media (max-width: 600px) {
     body {
       padding: 0;
-      margin: 0;
     }
-    .box {
-      border: none;
-      border-radius: 0;
+    div.page {
+      grid-template-columns: auto;
+      grid-template-rows: auto auto;
+      grid-template-areas:
+        "header"
+        "content"
+        "footer";
     }
-    h1.page-title {
-      font-size: 7vw;
-    }
-    header.page-header {
-      width: 100%;
-    }
-
-    grid-template-areas:
-      "header"
-      "nav"
-      "content"
-      "footer";
   }
+
   @media (min-width: 1200px) {
     body {
       padding: 10vh 10rem;

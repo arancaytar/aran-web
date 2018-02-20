@@ -29,9 +29,9 @@
   <body>
 
     <div class="page">
+      <%= partial "partials/navbar" %>
       <%= partial "partials/header" %>
       <%= partial("partials/content", :locals => { :content => yield }) %>
-      <%= partial "partials/navbar" %>
       <%= partial "partials/footer" %>
     </div>
 

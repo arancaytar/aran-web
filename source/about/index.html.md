@@ -1,7 +1,7 @@
 ---
 title: About
 ---
-I'm Aran, sometimes known as Arancaytar. I do a lot of stuff with websites,
+I'm Aran, also known as Arancaytar. I do a lot of stuff with websites,
 mostly using [PHP](https://php.net/) and [Drupal](https://www.drupal.org/).
 I currently live and work in Zurich, Switzerland, and have previously spent most
 of my life in Germany (studying in Aachen, Frankfurt and Berlin).

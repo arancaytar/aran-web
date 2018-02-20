@@ -1,3 +1,6 @@
+---
+title: Home
+---
 Hi, I'm [Aran](/about). This is the center of a loose collection of
 purpose-specific sites hosted under ermarian.net. These sites mostly relate to
 the community of the [Spiderweb Software](http://www.spidweb.com/) games and the

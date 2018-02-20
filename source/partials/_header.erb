@@ -1,10 +1,7 @@
-<header class="page-header box">
+<header class="page-header">
   <div class="page-logo">
-    <%= image_tag("/images/logo.png", alt: "Logo") %>
-  </div>
-  <h1 class="page-title">
     <% if current_page.url != '/' %><a href="/"><% end %>
-    aran
+      <%= image_tag("/images/logo.png", alt: "Logo") %>
     <% if current_page.url != '/' %></a><% end %>
-  </h1>
+  </div>
 </header>

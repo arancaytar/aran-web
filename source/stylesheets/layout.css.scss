@@ -1,16 +1,13 @@
-body {
-  padding: 9vh 1rem;
-}
-
 h1.content-title {
   margin: 0;
+  font-size: 2em;
 }
 
 div.page {
   display: grid;
 
   grid-template-areas:
-    "header header"
+    "header content"
     "nav content"
     "... content"
     "... footer";
@@ -24,13 +21,6 @@ div.page {
 
   header.page-header {
     grid-area: header;
-  }
-  div.page-logo, h1.page-title {
-    display: inline-block;
-    vertical-align: middle;
-  }
-  h1.page-title {
-    padding-left: 1em;
   }
   article.content {
     grid-area: content;
@@ -73,4 +63,9 @@ div.page {
       "nav"
       "content"
       "footer";
+  }
+  @media (min-width: 1200px) {
+    body {
+      padding: 10vh 10rem;
+    }
   }

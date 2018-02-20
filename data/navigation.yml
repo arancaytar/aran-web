@@ -1,6 +1,6 @@
 links:
   home:
-    path: ''
+    path: '/'
     name: Home
   about:
     path: /about

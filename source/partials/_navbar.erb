@@ -1,4 +1,4 @@
-<% @@url = current_page.url.scan(/(.*?)(\.html|\/)?$/)[0][0] %>
+<% @@url = current_page.url.scan(/(.+?)(\.html|\/)?$/)[0][0] %>
 <nav class="page-nav box">
   <%= partial("partials/menu", :locals => { :links => data.navigation.links }) %>
 </nav>

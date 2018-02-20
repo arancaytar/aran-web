@@ -1,0 +1,18 @@
+links:
+  home:
+    path: ''
+    name: Home
+  about:
+    path: /about
+    name: About
+  games:
+    name: Games
+    links:
+      life:
+        name: Life
+        parent: games
+        links:
+          hex:
+            path: /games/life/hex
+            name: Hex
+            parent: games.life

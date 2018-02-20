@@ -1,0 +1,15 @@
+<ul class="navbar">
+  <% links.each do |_, link| %>
+  <% active = link[:path] == @@url %>
+  <li>
+    <% if link[:path] %>
+      <%= link_to(link[:name], link[:path], class: (active ? 'active' : '')) %>
+    <% else %>
+      <%= link[:name] %>
+    <% end %>
+    <% if link[:links] != nil %>
+      <%= partial("partials/menu", :locals => { :links => link[:links]}) %>
+    <% end %>
+  </li>
+  <% end %>
+</ul>

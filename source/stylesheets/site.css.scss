@@ -32,7 +32,7 @@ a {
 
 ul.navbar {
   list-style: none;
-  padding-left: 0;
+  padding-left: 0px;
   margin: 0;
 
   li {
@@ -40,6 +40,10 @@ ul.navbar {
       color: white;
       font-weight: bold;
       cursor: default;
+    }
+
+    ul.navbar {
+      padding-left: 16px;
     }
   }
 }

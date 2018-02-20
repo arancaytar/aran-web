@@ -1,15 +1,4 @@
-<% links = [
-  { :url => '/', :name => 'Home' },
-  { :url => '/about/', :name => 'About' },
-  { :url => '/games/life/hex.html', :name => 'Hex Game of Life' }
-] %>
+<% @@url = current_page.url.scan(/(.*?)(\.html|\/)?$/)[0][0] %>
 <nav class="page-nav box">
-  <ul class="navbar">
-    <% links.each do |link| %>
-    <% active = link[:url] == current_page.url %>
-    <li>
-      <%= link_to(link[:name], link[:url], class: (active ? 'active' : '')) %>
-    </li>
-    <% end %>
-  </ul>
+  <%= partial("partials/menu", :locals => { :links => data.navigation.links }) %>
 </nav>

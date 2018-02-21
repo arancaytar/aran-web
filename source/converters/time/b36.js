@@ -15,13 +15,14 @@ const ui = ($ => {
   const tob36 = number => number.toString(36).padStart(6, 0);
   const fromb36 = number => parseInt(number.substring(0, 6), 36);
   const state = {
-    playing: null
+    playing: null,
+    time: null,
   };
 
   const refresh = time => {
-    time = time || (new Date());
-    dom.decimal.valueAsNumber = time.getTime();
-    const b36 = dom.b36.value = tob36(fromdate(time));
+    state.time = time || (new Date());
+    dom.decimal.valueAsNumber = Math.floor(state.time.getTime() / 1000) * 1000;
+    const b36 = dom.b36.value = tob36(fromdate(state.time));
     for (let i = 0; i < 6; i++) {
       const digit = b36[i];
       const prefix = b36.substring(0, i+1);
@@ -55,6 +56,7 @@ const ui = ($ => {
     dom,
     refresh,
     play,
-    stop
+    stop,
+    state
   };
 })(document.querySelector.bind(document));

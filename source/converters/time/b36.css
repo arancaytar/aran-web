@@ -1,0 +1,6 @@
+article table {
+  font-size: 0.8em;
+}
+article table tr:last-child td:nth-child(2) {
+  font-style: italic;
+}

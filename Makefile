@@ -3,7 +3,7 @@ all:
 
 
 init:
-	bundle install --binstubs
+	bundle install --path=vendor --binstubs
 
 
 server:

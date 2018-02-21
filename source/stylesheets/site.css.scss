@@ -38,13 +38,17 @@ a {
   border-radius: 0.5em;
 }
 
-button, input, table {
+button, input, table, textarea {
   border: 1px solid $color-blue-light;
   background: $color-blue-dark;
   padding: 10px;
   border-radius: 0.5em;
   color: white;
   outline: none;
+}
+
+textarea {
+  width: 100%;
 }
 
 button:disabled, input:disabled, input:read-only {

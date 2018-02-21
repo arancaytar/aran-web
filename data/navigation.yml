@@ -14,6 +14,15 @@ links:
           hex:
             path: /games/life/hex
             name: Hex
+      markov:
+        name: Markov
+        links:
+          words:
+            path: /games/markov/words
+            name: Words
+          letters:
+            path: /games/markov/letters
+            name: Letters
   converters:
     name: Converters
     links:

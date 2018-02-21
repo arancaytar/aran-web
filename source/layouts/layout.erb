@@ -15,7 +15,6 @@
         <link rel="stylesheet" href="<%= style %>" />
       <% end %>
     <% end %>
-    <%= javascript_include_tag "site" %>
     <%= partial "partials/title" %>
   </head>
   <body>
@@ -27,6 +26,7 @@
       <%= partial "partials/footer" %>
     </div>
 
+    <%= javascript_include_tag "site" %>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
     <% if (current_page.data.scripts) %>
       <% current_page.data.scripts.each do |script| %>

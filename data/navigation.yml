@@ -10,9 +10,7 @@ links:
     links:
       life:
         name: Life
-        parent: games
         links:
           hex:
             path: /games/life/hex
             name: Hex
-            parent: games.life

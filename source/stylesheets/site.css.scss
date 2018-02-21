@@ -56,7 +56,7 @@ ul.navbar {
   border-radius: 0.5em;
 }
 
-button {
+button, input, table {
   border: 1px solid $color-blue-light;
   background: $color-blue-dark;
   padding: 10px;
@@ -73,6 +73,15 @@ button {
   &:active {
     background: $color-blue-light;
   }
+}
+
+input[type=text] {
+  font-family: monospace;
+}
+
+tr, th, td {
+  border: 1px solid $color-blue-light;
+  background: $color-blue-medium;
 }
 
 fieldset {

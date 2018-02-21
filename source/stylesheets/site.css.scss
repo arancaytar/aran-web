@@ -4,7 +4,7 @@
 
 body {
   background-color: $color-blue-medium;
-  color: $color-grey-light;
+  color: $color-grey-4;
   font-family: -apple-system, BlinkMacSystemFont, "Avenir Next", "Avenir",
     "Segoe UI", "Lucida Grande", "Helvetica Neue", "Helvetica", "Fira Sans",
     "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu",
@@ -65,9 +65,9 @@ button, input, table {
   outline: none;
 
   &:disabled {
-    color: $color-grey-medium;
-    background: $color-grey-dark;
-    border-color: $color-grey-medium;
+    color: $color-grey-2;
+    background: $color-grey-1;
+    border-color: $color-grey-2;
   }
 
   &:active {

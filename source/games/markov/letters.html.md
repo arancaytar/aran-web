@@ -8,7 +8,7 @@ scripts: ['markov.js']
 <label for="size">Output size:</label>
 <input id="size" type="text" value="100" />
 <button id="start" type="button">Generate</button>
-<textarea id="input" rows="5">A Markov chain is a randomized sequence where the probabilities of the next state only depend on the current state. This can be used to generate random texts that superficially resemble a given source text.</textarea>
+<textarea id="input" rows="5"></textarea>
 <div id="output" class="box" hidden></div>
 
 This generator works exactly like the [Markov word generator](words). However,

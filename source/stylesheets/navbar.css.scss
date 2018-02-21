@@ -2,6 +2,25 @@ input#slide {
   display: none;
 }
 
+ul.navbar {
+  list-style: none;
+  padding-left: 0px;
+  margin: 0;
+
+  li {
+    color: $color-grey-3;
+
+    a.active {
+      color: white;
+      font-weight: bold;
+      cursor: default;
+    }
+
+    ul.navbar {
+      padding-left: 16px;
+    }
+  }
+}
 label.sidebar-toggle {
   display: none;
 }

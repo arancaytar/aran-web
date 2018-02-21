@@ -31,24 +31,6 @@ a {
   }
 }
 
-ul.navbar {
-  list-style: none;
-  padding-left: 0px;
-  margin: 0;
-
-  li {
-    a.active {
-      color: white;
-      font-weight: bold;
-      cursor: default;
-    }
-
-    ul.navbar {
-      padding-left: 16px;
-    }
-  }
-}
-
 .box {
   border: 1px solid $color-blue-light;
   background: $color-blue-dark;

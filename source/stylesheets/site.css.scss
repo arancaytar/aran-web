@@ -45,16 +45,15 @@ button, input, table {
   border-radius: 0.5em;
   color: white;
   outline: none;
+}
 
-  &:disabled {
-    color: $color-grey-2;
-    background: $color-grey-1;
-    border-color: $color-grey-2;
-  }
-
-  &:active {
-    background: $color-blue-light;
-  }
+button:disabled, input:disabled, input:read-only {
+  color: $color-grey-2;
+  background: $color-grey-1;
+  border-color: $color-grey-2;
+}
+button:active {
+  background: $color-blue-light;
 }
 
 input[type=text] {

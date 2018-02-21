@@ -38,13 +38,14 @@ const ui = ($ => {
   const buttonToggle = state => {
     dom.play.style.display = state ? 'none' : '';
     dom.pause.style.display = state ? '' : 'none';
+    dom.decimal.readOnly = dom.b36.readOnly = !!state;
   }
 
   const play = () => buttonToggle(state.playing = state.playing || setInterval(refresh, 1000)) || refresh();
   const stop = () => buttonToggle(state.playing = state.playing && clearInterval(state.playing));
 
   dom.play.onclick = play;
-  dom.decimal.onfocus = dom.b36.onfocus = dom.pause.onclick = stop;
+  dom.decimal.onclick = dom.b36.onclick = dom.pause.onclick = stop;
   dom.decimal.onchange = dom.b36.onchange = function () {
     const time = this.id === 'decimal' ? new Date(this.valueAsNumber) : todate(fromb36(this.value));
     refresh(time);

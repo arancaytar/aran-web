@@ -14,3 +14,12 @@ links:
           hex:
             path: /games/life/hex
             name: Hex
+  converters:
+    name: Converters
+    links:
+      time:
+        name: Time
+        links:
+          b36:
+            name: Base36
+            path: /converters/time/b36

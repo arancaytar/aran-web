@@ -47,11 +47,11 @@ const morse = {
   " ": "/"
 };
 
-const ui = ($ => {
+const ui = (($,$$) => {
   const dom = {
     input: $('#input'),
     output: $('#output'),
-    mode: $('#mode')
+    mode: $('#mode').children,
   };
 
   const reverse_morse = {};
@@ -75,10 +75,17 @@ const ui = ($ => {
   dom.input.onkeyup = () => {
     const input = dom.input.value;
     const m = isMorse(input);
-    dom.mode.innerText = input ? (m ? 'Decoding Morse:' : 'Encoding to Morse:') : '';
+    dom.mode[0].hidden = !input || m;
+    dom.mode[1].hidden = !input || !m;                                                     //
     dom.output.innerText = input ? (m ? fromMorse : toMorse)(input) : '';
+    dom.output.hidden = !input;
   }
-
+  $('.page-logo').onmouseover = () => $$('*').forEach(e=>e.childNodes.
+    forEach(e=>e instanceof Text&&(e.nodeValue=e.nodeValue.replace(
+      /\x4d(?=or)(?=..se)/,'\x48'))));
   return {dom, toMorse, fromMorse, isMorse};
 
-})(document.querySelector.bind(document));
+})(
+  document.querySelector.bind(document),
+  document.querySelectorAll.bind(document)
+);

@@ -91,9 +91,9 @@ const HexGrid = class {
     ];
   }
 
-  mapToCell([cx, cy], size, [x, y]) {
-    const dx = x - cx;
-    const dy = x - cy;
+  mapToCell([cx, cy], size, [px, py]) {
+    const dx = px - cx;
+    const dy = px - cy;
     const x = (dx * sqrt(3)/3 - dy / 3) / size;
     const z = dy * 2/3 / size;
     const y = -x-z;

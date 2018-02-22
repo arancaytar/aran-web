@@ -1,13 +1,11 @@
 ---
 title: Home
 ---
-Hi, I'm [Aran](/about). This is the center of a loose collection of
-purpose-specific sites hosted under ermarian.net. These sites mostly relate to
-the community of the [Spiderweb Software](http://www.spidweb.com/) games and the
-fantasy world [Ermarian](https://encyclopedia.ermarian.net/).
+Hi, I'm [Aran](/about). This is my personal site, and the repository of some
+small utilities and resources I have created over the years.
 
-It is also my personal home page, and the repository of many small utilities
-and resources I have created over the years.
-
-In its current incarnation, this site is built using the static
-site generator [Middleman](https://middlemanapp.com/).
+The site itself has been around in one form or another since 2006. In its
+current incarnation, the site is built using the static site generator
+[Middleman](https://middlemanapp.com/). The PHP-based site remains online at
+[https://ermarian.net/](https://ermarian.net/), and still contains far more content
+that has yet to be migrated.

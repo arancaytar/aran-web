@@ -30,6 +30,9 @@ links:
   converters:
     name: Converters
     links:
+      coordinates:
+        name: Coordinates
+        path: /converters/coordinates
       morse:
         name: Morse
         path: /converters/morse

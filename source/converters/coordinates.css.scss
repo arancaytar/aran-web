@@ -1,0 +1,74 @@
+#circle {
+  fill: #0000ff22;
+  stroke: #48a;
+  stroke-width: 0.01px;
+}
+
+#knob {
+  fill: red;
+  cursor: move;
+}
+
+#helper-azimuth {
+  stroke: purple;
+  stroke-width: 0.01px;
+}
+
+#helper-cartesian {
+  fill: #00ff0011;
+  stroke: #0f0;
+  stroke-width: 0.005px;
+}
+
+#converter {
+  display: grid;
+  width: 100%;
+  grid-template-rows: 1fr auto auto auto auto 1fr;
+  grid-template-columns: 1fr auto auto 1fr;
+  grid-template-areas:
+    "canvas ... ... ..."
+    "canvas cartxlabel cartx ..."
+    "canvas cartylabel carty ..."
+    "canvas polazlabel polaz ..."
+    "canvas polarlabel polar ..."
+    "canvas ... ... ...";
+  grid-gap: 5px;
+
+  #canvas {
+    grid-area: canvas;
+    width: 30vw;
+    height: 40vh;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-rows: auto 1fr auto auto auto auto;
+      grid-template-columns: 1fr auto auto 1fr;
+    grid-template-areas:
+      "canvas canvas canvas canvas"
+      "... ... ... ..."
+      "... cartxlabel cartx ..."
+      "... cartylabel carty ..."
+      "... polazlabel polaz ..."
+      "... polarlabel polar ...";
+
+    #canvas {
+      width: 100vw;
+    }
+  }
+
+
+  label {
+    display: block;
+    vertical-align: middle;
+    padding: 5px;
+  }
+
+  label[for=cartesian-x] { grid-area: cartxlabel }
+  #cartesian-x { grid-area: cartx }
+  label[for=cartesian-y] { grid-area: cartylabel }
+  #cartesian-y { grid-area: carty }
+  label[for=polar-azimuth] { grid-area: polazlabel }
+  #polar-azimuth { grid-area: polaz }
+  label[for=polar-radius] { grid-area: polarlabel }
+  #polar-radius { grid-area: polar }
+}

@@ -1,6 +1,7 @@
 @import "colors.css.scss";
 @import "layout.css.scss";
 @import "navbar.css.scss";
+@import "forms.css.scss";
 
 body {
   background-color: $color-blue-medium;
@@ -38,43 +39,8 @@ a {
   border-radius: 0.5em;
 }
 
-button, input, table, textarea {
-  border: 1px solid $color-blue-light;
+code {
   background: $color-blue-dark;
-  padding: 10px;
-  border-radius: 0.5em;
-  color: white;
-  outline: none;
-}
-
-textarea {
-  width: 100%;
-}
-
-button:disabled, input:disabled, input[type=text]:read-only {
   color: $color-grey-2;
-  background: $color-grey-1;
-  border-color: $color-grey-2;
-}
-button:active {
-  background: $color-blue-light;
-}
-
-input[type=range] {
-  margin: 0;
-  vertical-align: bottom;
-}
-
-input[type=text] {
-  font-family: monospace;
-}
-
-tr, th, td {
-  border: 1px solid $color-blue-light;
-  background: $color-blue-medium;
-}
-
-fieldset {
-  border: none;
-  text-align: center;
+  padding: 3px;
 }

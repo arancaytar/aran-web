@@ -26,6 +26,9 @@ links:
   converters:
     name: Converters
     links:
+      morse:
+        name: Morse
+        path: /converters/morse
       time:
         name: Time
         links:

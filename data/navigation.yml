@@ -35,3 +35,12 @@ links:
           b36:
             name: Base36
             path: /converters/time/b36
+  minecraft:
+    name: Minecraft
+    links:
+      refugia:
+        name: Refugia
+        links:
+          rail:
+            name: Rail
+            path: /minecraft/refugia/rail

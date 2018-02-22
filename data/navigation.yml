@@ -5,6 +5,10 @@ links:
   about:
     path: /about
     name: About
+    links:
+      sites:
+        name: Sites
+        path: /about/sites
   games:
     name: Games
     links:

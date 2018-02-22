@@ -8,7 +8,7 @@ scripts: ['markov.js']
 <label for="size">Output size:</label>
 <input id="size" type="text" value="100" />
 <button id="start" type="button">Generate</button>
-<textarea id="input" rows="5"></textarea>
+<textarea id="input" rows="5" placeholder="Input text"></textarea>
 <div id="output" class="box" hidden></div>
 
 A [Markov chain](https://en.wikipedia.org/wiki/Markov_chain) is a randomized

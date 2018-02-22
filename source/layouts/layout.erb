@@ -26,8 +26,9 @@
       <%= partial "partials/footer" %>
     </div>
 
-    <%= javascript_include_tag "site" %>
     <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.20.1/moment.min.js" integrity="sha256-ABVkpwb9K9PxubvRrHMkk6wmWcIHUE9eBxNZLXYQ84k=" crossorigin="anonymous"></script>
+    <%= javascript_include_tag "site" %>
     <% if (current_page.data.scripts) %>
       <% current_page.data.scripts.each do |script| %>
         <script src="<%= script %>"></script>

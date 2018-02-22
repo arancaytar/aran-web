@@ -51,7 +51,7 @@ textarea {
   width: 100%;
 }
 
-button:disabled, input:disabled, input:read-only {
+button:disabled, input:disabled, input[type=text]:read-only {
   color: $color-grey-2;
   background: $color-grey-1;
   border-color: $color-grey-2;
@@ -60,12 +60,13 @@ button:active {
   background: $color-blue-light;
 }
 
-input[type=text] {
-  font-family: monospace;
+input[type=range] {
+  margin: 0;
+  vertical-align: bottom;
 }
 
-input[type=datetime-local] {
-  padding: 8px;
+input[type=text] {
+  font-family: monospace;
 }
 
 tr, th, td {

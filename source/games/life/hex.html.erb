@@ -10,12 +10,14 @@ styles: ['life.css']
 ---
 <form id="form-controls">
   <fieldset>
-    <label>Size: <input type="range" id="size" min="5" max="120" step="1" value="10" /></label>
+    <label for="size">Size:</label>
+    <input type="range" id="size" min="5" max="120" step="1" value="10" />
     <button id="reset" type="button" title="Reset"><i class="fas fa-random"></i></button>
     <button id="start" type="button" title="Start"><i class="fas fa-play"></i></button>
     <button id="stop" type="button" title="Pause"><i class="fas fa-pause"></i></button>
     <button id="step" type="button" title="Step"><i class="fas fa-step-forward"></i></button>
-    <label>Speed: <input type="range" id="speed" min="-10" max="10" step="1" value="0" /></label>
+    <label for="speed">Speed:</label>
+    <input type="range" id="speed" min="-10" max="10" step="1" value="0" />
   </fieldset>
   <div class="box game-box">
     <canvas id="board"></canvas>

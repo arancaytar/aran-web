@@ -4,7 +4,7 @@ scripts: ['markov.js']
 ---
 <input type="hidden" id="type" value="letters" />
 <label for="memory">Memory (letters):</label>
-<input id="memory" type="text" value="1" />
+<input id="memory" type="range" steps="1" min="1" max="7" value="1" />
 <label for="size">Output size:</label>
 <input id="size" type="text" value="100" />
 <button id="start" type="button">Generate</button>

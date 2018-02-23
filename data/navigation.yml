@@ -37,7 +37,7 @@ links:
             name: Rotation
             path: /converters/ciphers/rotation
           vigenere:
-            name: Vigenére
+            name: "Vigen\u00e9re"
             path: /converters/ciphers/vigenere
       coordinates:
         name: Coordinates

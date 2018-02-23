@@ -4,20 +4,25 @@
   stroke-width: 0.01px;
 }
 
+.axis {
+  stroke: #ccc;
+  stroke-width: 0.01px;
+}
+
 #knob {
   fill: red;
   cursor: move;
 }
 
 #helper-azimuth {
-  stroke: purple;
-  stroke-width: 0.01px;
+  stroke: yellow;
+  stroke-width: 0.02px;
 }
 
 #helper-cartesian {
-  fill: #00ff0011;
+  fill: #00ff0022;
   stroke: #0f0;
-  stroke-width: 0.005px;
+  stroke-width: 0.02px;
 }
 
 #converter {

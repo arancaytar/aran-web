@@ -3,7 +3,7 @@ title: Markov letter chain
 scripts: ['markov.js']
 ---
 <input type="hidden" id="type" value="letters" />
-<label for="memory">Memory (words):</label>
+<label for="memory">Memory (letters):</label>
 <input id="memory" type="text" value="1" />
 <label for="size">Output size:</label>
 <input id="size" type="text" value="100" />

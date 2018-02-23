@@ -9,24 +9,6 @@ links:
       sites:
         name: Sites
         path: /about/sites
-  games:
-    name: Games
-    links:
-      life:
-        name: Life
-        links:
-          hex:
-            path: /games/life/hex
-            name: Hex
-      markov:
-        name: Markov
-        links:
-          words:
-            path: /games/markov/words
-            name: Words
-          letters:
-            path: /games/markov/letters
-            name: Letters
   converters:
     name: Converters
     links:
@@ -51,6 +33,24 @@ links:
           b36:
             name: Base36
             path: /converters/time/b36
+  games:
+    name: Games
+    links:
+      life:
+        name: Life
+        links:
+          hex:
+            path: /games/life/hex
+            name: Hex
+      markov:
+        name: Markov
+        links:
+          words:
+            path: /games/markov/words
+            name: Words
+          letters:
+            path: /games/markov/letters
+            name: Letters
   minecraft:
     name: Minecraft
     links:

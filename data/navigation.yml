@@ -30,6 +30,12 @@ links:
   converters:
     name: Converters
     links:
+      ciphers:
+        name: Ciphers
+        links:
+          rotation:
+            name: Rotation
+            path: /converters/ciphers/rotation
       coordinates:
         name: Coordinates
         path: /converters/coordinates

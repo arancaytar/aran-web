@@ -124,6 +124,7 @@ const ui = ($ => {
     dom.svg.canvas.style.cursor = 'unset';
   };
   dom.svg.canvas.onmousemove = e => state.dragging && sliderMouseEvent(e);
+  dom.svg.canvas.onclick = e => !state.dragging && sliderMouseEvent(e);
 
   return {dom, state};
 })(document.querySelector.bind(document));

@@ -27,7 +27,12 @@ styles: ['coordinates.css']
   <label for="cartesian-y">y</label>
   <input id="cartesian-y" type="number" step="0.001" value="0">
   <label for="polar-azimuth">θ</label>
-  <input id="polar-azimuth" type="number" step="0.001" min="-3.142" max="3.142" value="0">
+  <div id="polar-azimuth-container">
+    <input id="polar-azimuth" type="number" step="0.001" min="-3.142" max="3.142" value="0">
+    <!-- dirty hack -->
+    <span style="position:relative"><span style="position:absolute;top:2px;right:-3.5em">°</span></span>
+    <input id="polar-azimuth-deg" type="number" step="0.1" min="-180" max="180" value="0">
+  </div>
   <label for="polar-radius">r</label>
   <input id="polar-radius" type="number" step="0.001" min="0.001" value="1">
 </div>

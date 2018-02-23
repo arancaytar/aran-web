@@ -7,7 +7,8 @@ const ui = ($ => {
   };
   const polar = {
     azimuth: $('#polar-azimuth'),
-    radius: $('#polar-radius')
+    radius: $('#polar-radius'),
+    deg: $('#polar-azimuth-deg')
   };
   const output = {
     cartesian: $('#output-cartesian'),
@@ -52,6 +53,7 @@ const ui = ($ => {
     cartesian.y.value = y.toFixed(3);
     polar.azimuth.value = theta.toFixed(3);
     polar.radius.value = r.toFixed(3);
+    polar.deg.value = (180*theta/Math.PI).toFixed(1);
 
     output.cartesian.innerText = `(${x.toFixed(3)}, ${y.toFixed(3)})`;
     output.polar.innerText = `(${theta.toFixed(3)}, ${r.toFixed(3)})`;
@@ -81,6 +83,12 @@ const ui = ($ => {
     const r = Math.max(polar.radius.value, 0.001);
     update(r * Math.cos(theta), r * Math.sin(theta));
   }
+  const updateFromDeg = e => {
+    if (e.inputType === 'insertText') return;
+    const theta = polar.deg.value * Math.PI / 180;
+    const r = Math.max(polar.radius.value, 0.001);
+    update(r * Math.cos(theta), r * Math.sin(theta));
+  }
   const updateFromSlider = () => {
     const knob = dom.svg.knob;
     const [x, y] = readCoords(knob.getAttribute('cx'), knob.getAttribute('cy'));
@@ -91,6 +99,7 @@ const ui = ($ => {
   cartesian.x.onchange = cartesian.y.onchange = updateFromCartesian;
   polar.azimuth.oninput = polar.radius.oninput =
   polar.azimuth.onchange = polar.radius.onchange = updateFromPolar;
+  polar.deg.oninput = polar.deg.onchange = updateFromDeg;
 
   const sliderMouseEvent = ({pageX, pageY}) => {
     const knob = dom.svg.knob;

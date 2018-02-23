@@ -73,7 +73,7 @@
   label[for=cartesian-y] { grid-area: cartylabel }
   #cartesian-y { grid-area: carty }
   label[for=polar-azimuth] { grid-area: polazlabel }
-  #polar-azimuth { grid-area: polaz }
+  div#polar-azimuth-container { grid-area: polaz }
   label[for=polar-radius] { grid-area: polarlabel }
   #polar-radius { grid-area: polar }
 }

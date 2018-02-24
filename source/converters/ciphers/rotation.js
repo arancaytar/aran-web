@@ -82,7 +82,7 @@ const ui = ($ => {
 
   dom.buttons.invert.onclick = () => {
     dom.input.value = dom.output.innerText;
-    dom.shift.value = 26 - dom.shift.value;
+    dom.shift.value = (26 - dom.shift.value) % 26;
     update();
   };
 

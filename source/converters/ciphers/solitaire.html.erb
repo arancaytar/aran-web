@@ -5,6 +5,7 @@ scripts:
   - solitaire.ui.js
 styles:
   - /stylesheets/switch.css
+  - lockswitch.css
 ---
 <p>
   <textarea id="input" rows="5" placeholder="Input text"></textarea>
@@ -13,13 +14,13 @@ styles:
 <label for="deck">Initial card deck:</label>
 <div id="deck" class="box code" contenteditable></div>
 
-<p>
+<fieldset>
   <label for="password">Password:</label> <input id="password" type="text" />
   <input id="direction" type="checkbox" class="switch "/>
   <label for="direction" class="switch"></label>
   <input id="preserve" type="checkbox" />
   <label for="preserve">Preserve formatting</label>
-</p>
+</fieldset>
 <div id="output" class="box code" hidden></div>
 
 <%= partial 'converters/ciphers/solitaire' %>

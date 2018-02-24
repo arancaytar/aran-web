@@ -1,47 +1,42 @@
 input[type=checkbox].switch {
-	height: 0;
-	width: 0;
-	visibility: hidden;
+  height: 0;
+  width: 0;
+  visibility: hidden;
 
   &+ label.switch {
-  	cursor: pointer;
-  	text-indent: -9999px;
-  	width: 5em;
-  	height: 2em;
-  	background: green;
-  	display: inline-block;
+    cursor: pointer;
+    text-indent: 0em;
+    font-size: 1em;
+    width: 5em;
+    height: 2em;
+    display: inline-block;
     vertical-align: middle;
-  	border-radius: 1em;
-  	position: relative;
+    border-radius: 1em;
+    position: relative;
 
     &:after {
-    	content: '\f023';
-			font-family: FontAwesome;
-			color: black;
-    	position: absolute;
-    	top: 1px;
-    	left: 5px;
-    	width: 1.9em;
-    	height: 1.9em;
-    	background: white;
-    	border-radius: 0.9em;
-    	transition: 0.3s;
+      position: absolute;
+      box-sizing: border-box;
+      padding-top:0.4em;
+      top: 1px;
+      left: 5px;
+      width: 1.9em;
+      height: 1.9em;
+      background: white;
+      border-radius: 0.9em;
+      transition: 0.3s;
     }
 
     &:active:after {
-    	width: 2.1em;
+      width: 2.1em;
     }
   }
 
   &:checked {
     &+ label {
-  	  background: orange;
-
       &:after {
-				content: '\f084';
-				color: black;
-      	left: calc(100% - 5px);
-      	transform: translateX(-100%);
+        left: calc(100% - 5px);
+        transform: translateX(-100%);
       }
     }
     &~ span#encrypting {

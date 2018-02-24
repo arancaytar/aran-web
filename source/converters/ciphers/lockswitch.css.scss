@@ -1,0 +1,19 @@
+input[type=checkbox].switch {
+  &+ label.switch {
+    background: green;
+
+    &:after {
+      color: black;
+      content: '\f023';
+      font-family: FontAwesome;
+    }
+  }
+
+  &:checked + label.switch {
+    background: orange;
+
+    &:after {
+      content: '\f084';
+    }
+  }
+}

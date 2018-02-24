@@ -3,6 +3,7 @@ title: Vigenére cipher
 scripts: ['vigenere.js']
 styles:
   - /stylesheets/switch.css
+  - lockswitch.css
   - vigenere.css
 ---
 The [Vigenére cipher](https://en.wikipedia.org/wiki/Vigenére cipher) uses a cyclical
@@ -13,8 +14,6 @@ sequence of Caesar ciphers, represented by a keyword.
   <label for="key">Keyword</label>
   <input id="key" type="text" />
   <input id="direction" type="checkbox" class="switch "/>
-  <label for="direction" class="switch" data-color-on="orange" data-color-off="green"></label>
-  <span id="encrypting">Encrypting</span>
-  <span id="decrypting">Decrypting</span>
+  <label for="direction" class="switch"></label>
 </fieldset>
 <div id="output" class="box code" hidden></div>

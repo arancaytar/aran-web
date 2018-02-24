@@ -40,11 +40,11 @@ links:
     name: Games
     links:
       life:
-        name: Life
+        name: Automata
         links:
           hex:
-            path: /games/life/hex
-            name: Hex
+            path: /games/automata/hexlife
+            name: Hex Life
       markov:
         name: Markov
         links:

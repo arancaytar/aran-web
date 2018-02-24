@@ -18,6 +18,9 @@ links:
           rotation:
             name: Rotation
             path: /converters/ciphers/rotation
+          solitaire:
+            name: Solitaire
+            path: /converters/ciphers/solitaire
           vigenere:
             name: "Vigen\u00e9re"
             path: /converters/ciphers/vigenere

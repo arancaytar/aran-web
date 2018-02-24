@@ -20,12 +20,18 @@ const ui = (($, Solitaire) => {
 
   const run = () => {
     const input = dom.preserve.checked ? dom.input.value : cleanText(dom.input.value);
-    const output = Solitaire.Deck.fromInput(dom.deck.innerText).toggle(input, !dom.direction.checked);
-    dom.output.innerText = dom.preserve.checked ? output : chunkText(output);
     dom.output.hidden = !input;
+    try {
+      const output = Solitaire.Deck.fromInput(dom.deck.innerText).toggle(input, !dom.direction.checked);
+      dom.output.innerText = dom.preserve.checked ? output : chunkText(output);
+    }
+    catch (error) {
+      dom.output.innerHTML = error;
+    }
   };
 
-  dom.input.oninput = dom.direction.onchange = dom.preserve.onchange = run;
+  dom.input.oninput = dom.deck.oninput =
+  dom.direction.onchange = dom.preserve.onchange = run;
 
   const setPassword = () => {
     const password = cleanText(dom.password.value);

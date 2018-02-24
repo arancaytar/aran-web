@@ -13,16 +13,16 @@ const Solitaire = (() => {
   const REV_JOKERS = flip(JOKERS);
   const REV_SUITS = flip(SUITS);
   const REV_VALUES = flip(VALUES);
-  const REV_SUITS_UNICODE = flip(SUITS_UNICODE);
-
-  const transliterate = string => string
-    .replace(/[♣♦♥♠]/g, m => SUITS[REV_SUITS_UNICODE[m]]);
+  Object.assign(REV_SUITS, flip(SUITS_UNICODE));
 
   const readCard = string => {
-    const m = string.match(/([A23456789TJQK])([cdhs])/);
-    if (m) return 13*REV_SUITS[m[2]] + REV_VALUES[m[1]] + 1;
     if (string in REV_JOKERS) return REV_JOKERS[string];
+    const rank = string.match(/[A23456789TJQK]/);
+    const suit = string.match(/[cdhsCDHS♣♦♥♠]/);
+    if (rank && suit) return 13*REV_SUITS[suit[0].toLowerCase()] + REV_VALUES[rank[0]] + 1;
+    throw `Error: <code>${string}</code> is not a valid card.`;
   }
+
   const cardWriter = (suits=SUITS) => code =>
     (code in JOKERS) ? JOKERS[code] :
     `${VALUES[(code-1) % 13]}${suits[Math.floor((code-1) / 13)]}`;
@@ -40,10 +40,10 @@ const Solitaire = (() => {
     }
 
     static fromInput(input) {
-      const cards = transliterate(input).replace(/[^ABTJQK2-9cdhs\s]/g, '').trim().split(/\s+/);
+      const cards = input.replace(/[^ABTJQK2-9CDHScdhs♣♦♥♠\s]/g, '').trim().split(/\s+/);
 
       if (cards.length !== 54) {
-        throw `Error: Finding ${cards.length} instead of 54 tokens.`;
+        throw `Error: Found ${cards.length} instead of 54 cards.`;
       }
 
       const deck = cards.map(readCard);
@@ -51,9 +51,6 @@ const Solitaire = (() => {
 
       for (let i in deck) {
         const value = deck[i];
-        if (value === undefined) {
-          throw `Error: Card <code>${cards[i]}</code> matches neither [A23456789TJQK][cdhs] nor [AB].`;
-        }
         if (positions[value] !== undefined) {
           throw `Error: Card #${i+1} <code>${cards[i]}</code> is a duplicate of #${positions[value]}`;
         }

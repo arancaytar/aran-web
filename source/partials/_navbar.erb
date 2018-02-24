@@ -1,7 +1,7 @@
 <% @@url = current_page.url.scan(/(.+?)(\.html|\/)?$/)[0][0] %>
 <input type="checkbox" id="slide" name="" value="" />
 <div class="container-sidebar">
-	<label for="slide" class="sidebar-toggle"><i class="fas fa-bars"></i></label>
+  <label for="slide" class="sidebar-toggle"><i class="fas fa-bars"></i></label>
   <nav class="page-nav box">
     <%= partial("partials/menu", :locals => { :links => data.navigation.links }) %>
   </nav>

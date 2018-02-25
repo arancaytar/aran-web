@@ -63,3 +63,9 @@ links:
           rail:
             name: Rail
             path: /minecraft/refugia/rail
+  utilities:
+    name: Utilities
+    links:
+      password:
+        name: Password
+        path: /utilities/password

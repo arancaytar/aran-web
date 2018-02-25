@@ -32,3 +32,17 @@ exclamation marks).
 <div id="stats"></div>
 
 Word list provided by [Word frequency data](https://www.wordfrequency.info).
+
+Note: Many systems use incompetently written password authentication, and
+therefore do not allow passwords to contain spaces (or, in some exceptionally
+egregious cases, require mixed case, numbers, special characters or even
+restrict the maximum length).
+
+My suggestion for the first problem is to set the delimiter to some other
+character (like `.` or `-`, which also takes care of the fourth problem), for
+the second to capitalize the first letter of each word (an easily memorable
+rule), for the third or fourth to simply append `1!` (pronounced "FU"), and for
+the fourth to completely refuse to use that system if at all possible.
+
+In all five cases, it is also my suggestion to teach good programming to
+whomever is in charge of building or maintaining that system.

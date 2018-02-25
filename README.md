@@ -11,3 +11,7 @@ for resolving clean URLs.
 Deployment is performed automatically by merging to the master branch of this repository.
 
 Pull requests welcome!
+
+# License
+
+The content of this site are licensed Creative Commons, CC-BY-SA (see attached license file).

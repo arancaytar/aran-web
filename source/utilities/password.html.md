@@ -21,7 +21,9 @@ exclamation marks).
   <option value="8" label="8" />
 </datalist>
 <input id="cap" type="checkbox"><label for="cap">Capitalize</label>
-<input id="delimiter" type="text" value=" "><label for="delimiter">Delimiter</label>
+<input id="delimiter" type="text" value=" " size="1">
+<label for="delimiter">Delimiter</label>
+<button id="regenerate" type="button" title="Regenerate"><i class="fas fa-sync-alt"></i></button>
 
 </fieldset>
 

@@ -37,6 +37,11 @@ a {
   background: $color-blue-dark;
   padding: 10px;
   border-radius: 0.5em;
+
+  &.break {
+    overflow-wrap: break-word;
+    width: 60vw;
+  }
 }
 
 code {

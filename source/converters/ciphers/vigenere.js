@@ -6,7 +6,7 @@ const ui = ($ => {
     direction: $('#direction')
   };
 
-  const readKey = (key, sign=1) => Array.from(key.toLowerCase().replace(/[^a-z]+/, ''))
+  const readKey = (key, sign=1) => Array.from(key.toLowerCase().replace(/[^a-z]/g, ''))
     .map(c => ((c.charCodeAt(0) - 97)*sign+26)%26);
 
   const vigenere = (text, key, sign=1) => {

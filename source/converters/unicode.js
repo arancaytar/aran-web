@@ -6,8 +6,15 @@ const ui = ($ => {
     target: $('#target')
   };
 
-  const options = {'raw': 'Raw'};
+  const options = {'raw': 'Raw', 'u16': 'Unicode (hex, space-separated)'};
   const formats = {};
+  formats.raw = {decode: a => a, encode: a => a};
+  formats.u16 = {
+    decode: a => stripDown(/[^0-9a-f\s]/g, a.toLowerCase(), false).split(/\s+/)
+      .map(s => String.fromCharCode(parseInt(s, 16)))
+      .join(''),
+    encode: a => Array.from(a).map(s => s.charCodeAt().toString(16)).join(' ')
+  };
 
   const bases = {
     2: 'Binary',
@@ -38,12 +45,12 @@ const ui = ($ => {
   const decodeBytes = (base, encoding, input) =>
     readChars[encoding](readBytes[base](input));
   const decode = (source, input) =>
-    (source === 'raw') ? input :
-    decodeBytes(formats[source].base, formats[source].encoding, input);
+    formats[source].base ? decodeBytes(formats[source].base, formats[source].encoding, input)
+                         : formats[source].decode(input);
 
   const readBytes = [];
-  const stripDown = (bad, s) => {
-    const stripped = s.replace(/\s+/g, '');
+  const stripDown = (bad, s, spaces=true) => {
+    const stripped = spaces ? s.replace(/\s+/g, '') : s;
     const x = stripped.match(bad);
     if (x) throw `Bad character ${x[0]}`;
     return stripped;
@@ -125,13 +132,13 @@ const ui = ($ => {
     let output = '';
     while (i < bytes2.length) {
       if (bytes2[i] < 0xd800 || bytes2[i] >= 0xe000) {
-        output += String.fromCharCode(bytes[i++]);
+        output += String.fromCharCode(bytes2[i++]);
       }
       else {
         if (bytes2[i] > 0xdbff) throw `Bad byte sequence ${bytes[i].toString(16)} at #${2*i}`;
         const high = bytes[i++] & 0x3ff;
         const low = bytes[i++] & 0x3ff;
-        output += String.fromCharCode(high << 10 | low);
+        output += String.fromCharCode((high << 10) | low);
       }
     }
     return output;
@@ -144,8 +151,8 @@ const ui = ($ => {
   const encodeBytes = (base, encoding, input) =>
     writeBytes[base](toBytes[encoding](input))
   const encode = (target, input) =>
-    (target === 'raw') ? input :
-    encodeBytes(formats[target].base, formats[target].encoding, input);
+    formats[target].base ? encodeBytes(formats[target].base, formats[target].encoding, input)
+      : formats[target].encode(input);
 
   const writeBytes = [];
   const l = {2: 8, 8: 3, 10: 1, 16: 2};

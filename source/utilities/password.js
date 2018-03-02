@@ -12,8 +12,9 @@ const ui = (($, words) => {
     passwords: [],
   }
 
-  const arrayRand = arr => arr[Math.floor(Math.random()*arr.length)];
-  const arrayRands = (arr, k) => Array(k).fill(0).map(_ => arrayRand(arr));
+  const random = k => Array.from(window.crypto.getRandomValues(new Uint32Array(k))).map(x => x / 2**32);
+
+  const arrayRands = (arr, k) => random(k).map(x => arr[Math.floor(x * arr.length)]);
 
   const password = k => arrayRands(words, k);
   const passwords = (k, n) => Array(n).fill(0).map(_ => password(k));

@@ -48,3 +48,7 @@ the fifth to completely refuse to use that system if at all possible.
 
 In all five cases, it is also my suggestion to teach good programming to
 whomever is in charge of building or maintaining that system.
+
+## Trust
+
+This is a client-only utility whose source is available at [password.js](password.js).

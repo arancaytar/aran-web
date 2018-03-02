@@ -27,7 +27,7 @@ exclamation marks).
 
 </fieldset>
 
-<div id="output" class="box code"></div>
+<div id="output" class="box code" style="text-align: center; font-size: 1.5em"></div>
 
 ## Information
 

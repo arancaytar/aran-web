@@ -1,0 +1,19 @@
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta name="viewport"
+				content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<meta name="generator" value="Middleman">
+
+	<link rel="icon" href="/images/icon.png" />
+	<link href="https://use.fontawesome.com/releases/v5.0.7/css/all.css" rel="stylesheet">
+
+	<%= stylesheet_link_tag "site" %>
+	<% if (current_page.data.styles) %>
+		<% current_page.data.styles.each do |style| %>
+			<link rel="stylesheet" href="<%= style %>" />
+		<% end %>
+	<% end %>
+	<%= partial "partials/document/title" %>
+	<% if defined? extra %><%= extra %><% end %>
+</head>

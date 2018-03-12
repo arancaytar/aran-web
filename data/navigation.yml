@@ -9,6 +9,9 @@ links:
       sites:
         name: Sites
         path: /about/sites
+  blog:
+    name: Blog
+    path: /blog
   converters:
     name: Converters
     links:

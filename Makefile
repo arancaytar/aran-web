@@ -1,4 +1,4 @@
-all: init
+all:
 	middleman build
 
 

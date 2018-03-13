@@ -1,5 +1,6 @@
 all:
 	middleman build
+	find build/blog -type f |xargs sed -i 's/href="\(\/.*\)\.html"/href="\1"/g'
 
 
 init:

@@ -8,7 +8,8 @@ end
 activate :blog do |blog|
   # set options on blog
   blog.layout = "blog"
-  blog.permalink = "blog/:year/:month/:day/:title"
+  blog.prefix = "blog"
+  blog.permalink = ":year/:month/:day/:title.html"
   blog.sources = "articles/:year/:month/:day/:title.html"
   blog.tag_template = "blog/tag.html"
   blog.calendar_template = "blog/calendar.html"

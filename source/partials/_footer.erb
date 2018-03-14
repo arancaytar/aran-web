@@ -4,9 +4,7 @@
   <% if source %>
   <% mtime = File.mtime(source) %>
   Last modified
-  <time datetime="<%= mtime.strftime('%Y-%m-%dT%H:%M:%S%z') %>">
-    <%= mtime.strftime('%Y-%m-%d %H:%M:%S %z') %>
-  </time> |
+  <%= partial('partials/atoms/time', :locals => { :time => mtime }) %> |
   <% end %>
   <a href="https://github.com/arancaytar/aran-web">GitHub</a>
 </footer>

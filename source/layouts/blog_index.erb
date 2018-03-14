@@ -1,15 +1,17 @@
 <!doctype html>
 <html>
   <%= partial("partials/document/head", :locals => {
-    :extra => partial("partials/blog/head"),
-    :title => (current_article.title unless current_article.nil?)
+    :extra => partial("partials/blog/head")
   }) %>
 
   <body>
     <div class="page">
       <%= partial "partials/navbar" %>
       <%= partial "partials/header" %>
-      <%= partial("partials/content", :locals => { :content => yield }) %>
+      <%= partial("partials/content", :locals => {
+        :content => yield,
+        :element => 'section'
+      }) %>
       <%= partial "partials/blog/sidebar" %>
       <%= partial "partials/footer" %>
     </div>

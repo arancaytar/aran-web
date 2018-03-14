@@ -32,7 +32,7 @@ div.page {
     grid-area: blog;
   }
 
-  article.content {
+  article.content, section.content {
     grid-area: content;
   }
   div.container-sidebar {

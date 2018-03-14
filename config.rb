@@ -7,7 +7,7 @@ end
 
 activate :blog do |blog|
   # set options on blog
-  blog.layout = "blog"
+  blog.layout = "blog_article"
   blog.prefix = "blog"
   blog.permalink = ":year/:month/:day/:title.html"
   blog.sources = "articles/:year/:month/:day/:title.html"

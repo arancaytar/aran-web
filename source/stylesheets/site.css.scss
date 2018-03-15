@@ -2,6 +2,7 @@
 @import "layout.css.scss";
 @import "navbar.css.scss";
 @import "forms.css.scss";
+@import "blog.css.scss";
 
 body {
   background-color: $color-blue-medium;
@@ -48,22 +49,4 @@ code {
   background: $color-blue-dark;
   color: $color-grey-2;
   padding: 3px;
-}
-
-.byline {
-  font-style: italic;
-}
-
-ul.tags {
-  list-style: none;
-  display: inline-block;
-  padding: 0;
-
-  &:before {
-    content: "|";
-  }
-
-  > li {
-    display: inline-block;
-  }
 }

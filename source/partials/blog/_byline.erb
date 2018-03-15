@@ -1,0 +1,10 @@
+<span class="byline">
+  By Aran, <%= partial("partials/atoms/time", :locals => { :time => article.date }) %>
+</span>
+<% if article.tags %>
+<ul class="tags">
+  <% article.tags.each do |tag| %>
+    <li><%= link_to "#{tag}", tag_path(tag) %></li>
+  <% end %>
+</ul>
+<% end %>

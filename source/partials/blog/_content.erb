@@ -1,17 +1,8 @@
-<article class="content">
+<article class="content blog-post">
   <% if current_page.data.title %>
   <header>
     <h1 class="content-title"><%= current_page.data.title %></h1>
-    <span class="byline">
-      By Aran, <%= partial("partials/atoms/time", :locals => { :time => current_article.date }) %>
-    </span>
-    <% if current_article.tags %>
-    <ul class="tags">
-      <% current_article.tags.each do |tag| %>
-        <li><%= link_to "#{tag}", tag_path(tag) %></li>
-      <% end %>
-    </ul>
-    <% end %>
+    <%= partial('partials/blog/byline', :locals => { :article => current_article }) %>
   </header>
   <% end %>
 

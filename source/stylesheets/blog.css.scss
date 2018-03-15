@@ -1,0 +1,27 @@
+.byline {
+  font-style: italic;
+}
+
+ul.tags {
+  list-style: none;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+
+  &:before {
+    content: "|";
+  }
+
+  > li {
+    display: inline-block;
+  }
+}
+
+article.blog-post {
+  margin: 1em;
+
+  h1 {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+}

@@ -18,7 +18,7 @@ layout: blog_index
     <%= partial('partials/atoms/time', :locals => {:time => article.date }) %>
     <!-- use article.summary(250) if you have Nokogiri available to show just
          the first 250 characters -->
-    <%= article.body %>
+    <%= article.summary(250) %>
   </article>
 <% end %>
 

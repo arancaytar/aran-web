@@ -57,7 +57,7 @@ const ui = ($ => {
   }
   readBytes[2] = input => getChunks(8, stripDown(/[^01]/g, input)).map(s => parseInt(s, 2));
   readBytes[8] = input => getChunks(3, stripDown(/[^0-7]/g, input)).map(s => parseInt(s, 8));
-  readBytes[10] = input => stripDown(/[^0-9\s]/g, input).split(/\s+/).map(s => parseInt(s));
+  readBytes[10] = input => stripDown(/[^0-9\s]/g, input, false).split(/\s+/).map(s => parseInt(s));
   readBytes[16] = input => getChunks(2, stripDown(/[^0-9a-f]/g, input.toLowerCase())).map(s => parseInt(s, 16));
 
   const fromBase64 = {};

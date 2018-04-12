@@ -59,8 +59,8 @@ I would add `10 + 10 + 25 + 3` to get a minimum entropy of 48 bits.
 Note: Do not focus obsessively on the difficulty of brute-forcing. The biggest risk
 to your password's security is you. Avoid storing it in clear text, avoid
 entering it on devices you do not control, avoid using similar passwords on different
-systems (even non-simultaneously). Avoid letting your device get compromised, and
-avoid entering your password on imitations of the true system.
+systems (even non-simultaneously). Do not let your device get compromised, and
+*never* let a third-party service access your account with your password.
 
 ## Format
 

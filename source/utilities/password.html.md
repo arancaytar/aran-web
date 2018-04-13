@@ -42,7 +42,7 @@ a cryptosystem should be secure if everything but the key is public knowledge.
 Likewise, a password should be secure even if the attacker knows your method of
 choosing a password. Naive passwords that depend on personal data (names, dates)
 trivially fail this challenge, but even an ostensibly *good* password (like `correct
-horse battery staple`) are weak if the words are picked by a human, because
+horse battery staple`) can be weak if the words are picked by a human, because
 humans are bad at generating randomness.
 
 The minimum entropy of your password can be approximated as a sum of several binary logarithms:
@@ -65,18 +65,15 @@ systems (even non-simultaneously). Do not let your device get compromised, and
 ## Format
 
 Many systems use incompetently written password authentication, and
-therefore do not allow passwords to contain spaces (or, in some exceptionally
-egregious cases, require mixed case, numbers, special characters or even
-restrict the maximum length).
+therefore do not allow passwords to contain spaces (or, in other cases, enforce
+security theater policies, such as mixed case or numbers, or actively sabotage
+security by limiting the maximum length).
 
 My suggestion for the first problem is to set the delimiter to some other
 character (like `.` or `-`, which also takes care of the fourth problem), for
 the second to capitalize the first letter of each word (an easily memorable
-rule), for the third or fourth to simply append `1!` (pronounced "FU"), and for
-the fifth to completely refuse to use that system if at all possible.
-
-In all five cases, it is also my suggestion to teach good programming to
-whomever is in charge of building or maintaining that system.
+rule) or append `1!` (pronounced "FU"), and for the fifth to completely refuse
+to use that system if at all possible.
 
 ## Security
 

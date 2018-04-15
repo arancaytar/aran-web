@@ -14,6 +14,3 @@ This is a list of sites that I currently maintain.
   community.
 * [The Ermarian Network](https://ermarian.net/), the previous version of *this*
   site, based on a custom-written PHP template system.
-
-I currently also serve as one of the administrators of [Calamity Refuge](https://calref.net/),
-a small creative community loosely affiliated with the Spiderweb Software fandom.

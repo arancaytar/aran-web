@@ -20,9 +20,10 @@ exclamation marks).
   <option value="6" label="6" />
   <option value="8" label="8" />
 </datalist>
-<input id="cap" type="checkbox"><label for="cap">Capitalize</label>
-<input id="delimiter" type="text" value=" " size="1">
+<input id="cap" type="checkbox" /><label for="cap">Capitalize</label>
+<input id="delimiter" type="text" value=" " size="1" />
 <label for="delimiter">Delimiter</label>
+<input id="avoid" type="text" size="2"><label for="avoid">Avoid letters</label>
 <button id="regenerate" type="button" title="Regenerate"><i class="fas fa-sync-alt"></i></button>
 
 </fieldset>

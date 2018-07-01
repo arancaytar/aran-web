@@ -1,8 +1,11 @@
-const ui = (($, words) => {
+const ui = (($, wordsOriginal) => {
+  let words = wordsOriginal;
+
   const dom = {
     output: $('#output'),
     length: $('#length'),
     count: $('#count'),
+    avoid: $('#avoid'),
     stats: $('#stats'),
     cap: $('#cap'),
     delimiter: $('#delimiter'),
@@ -19,6 +22,15 @@ const ui = (($, words) => {
   const password = k => arrayRands(words, k);
   const passwords = (k, n) => Array(n).fill(0).map(_ => password(k));
 
+  const setWordList = avoid => {
+    const avoidLetters = avoid.toLowerCase().split('');
+    words = wordsOriginal.filter(
+      word => (word => avoidLetters.every(
+        letter => !word.includes(letter)
+      ))(word.toLowerCase())
+    );
+  }
+
   const update = () => {
     dom.output.innerText = state.passwords.map(
       p => p.map(
@@ -30,15 +42,22 @@ const ui = (($, words) => {
   }
 
   const regenerate = () => {
+    setWordList(dom.avoid.value);
     const length = +dom.length.value;
     const bits = Math.log2(words.length).toFixed(2);
     state.passwords = passwords(length, +dom.count.value);
-    dom.stats.innerText = `The word list contains ${words.length} words, so a password of length ${length} has ${bits*length} bits of entropy.`;
+    if (words.length) {
+      dom.stats.innerText = `The word list contains ${words.length} words, so a password of length ${length} has ${bits*length} bits of entropy.`;
+    }
+    else {
+      dom.stats.innerText = `The word list is empty; no passwords can be generated.`;
+      state.passwords = [];
+    }
     update();
   }
 
   dom.delimiter.oninput = dom.cap.onchange = update;
-  dom.regenerate.onclick = dom.count.oninput = dom.length.oninput = regenerate;
+  dom.regenerate.onclick = dom.count.oninput = dom.length.oninput = dom.avoid.oninput = regenerate;
 
   regenerate();
 

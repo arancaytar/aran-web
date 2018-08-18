@@ -39,6 +39,9 @@ links:
           b36:
             name: Base36
             path: /converters/time/b36
+          ermarian:
+            name: Ermarian
+            path: /converters/time/ermarian
       unicode:
         name: Unicode
         path: /converters/unicode

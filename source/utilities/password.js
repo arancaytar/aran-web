@@ -32,14 +32,27 @@ const ui = (($, wordsOriginal) => {
   }
 
   const update = () => {
-    dom.output.innerText = state.passwords.map(
-      p => p.map(
-        dom.cap.checked ? word => word.charAt().toUpperCase() + word.slice(1)
-        : word => word.toLowerCase()
-      )
-      .join(dom.delimiter.value)
-    ).join('\n');
-  }
+    dom.output.innerHTML = '';
+    state.passwords.forEach(
+      p => {
+          const x = document.createElement('p');
+          x.innerText = p.map(
+              dom.cap.checked ? word => word.charAt().toUpperCase() + word.slice(1)
+                  : word => word.toLowerCase()
+          ).join(dom.delimiter.value);
+          x.onclick = () => selectText(x);
+          x.ondblclick = () => selectText(dom.output);
+          dom.output.appendChild(x);
+      }
+    );
+  };
+
+  const selectText = e => {
+    const r = document.createRange();
+    r.selectNodeContents(e);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(r);
+  };
 
   const regenerate = () => {
     setWordList(dom.avoid.value);

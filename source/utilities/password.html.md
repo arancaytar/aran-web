@@ -3,6 +3,7 @@ title: Correct horse
 scripts:
   - words.js
   - password.js
+styles: ['password.css']
 ---
 This generates a passphrase from a specified word list. Passphrases are
 demonstrably [more secure and more memorable](https://xkcd.com/936/) than a password
@@ -28,7 +29,7 @@ exclamation marks).
 
 </fieldset>
 
-<div id="output" class="box code" style="text-align: center; font-size: 1.5em"></div>
+<div id="output" class="box code"></div>
 
 ## Entropy
 

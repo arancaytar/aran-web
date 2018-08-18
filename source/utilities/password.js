@@ -40,18 +40,13 @@ const ui = (($, wordsOriginal) => {
               dom.cap.checked ? word => word.charAt().toUpperCase() + word.slice(1)
                   : word => word.toLowerCase()
           ).join(dom.delimiter.value);
-          x.onclick = () => selectText(x);
-          x.ondblclick = () => selectText(dom.output);
+          x.onclick = () => {
+            x.select();
+            document.execCommand('copy');
+          };
           dom.output.appendChild(x);
       }
     );
-  };
-
-  const selectText = e => {
-    const r = document.createRange();
-    r.selectNodeContents(e);
-    window.getSelection().removeAllRanges();
-    window.getSelection().addRange(r);
   };
 
   const regenerate = () => {

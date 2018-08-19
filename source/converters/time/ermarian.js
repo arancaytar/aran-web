@@ -59,13 +59,14 @@ const ui = ($ => {
         const tam2 = `${tam}`.padStart(2, 0);
         const rel3 = `${rel}`.padStart(3, 0);
         const yearx = `${year.toString(16)}`;
+        const dayx2 = `${day.toString(16)}`.padStart(2, 0);
         const tortamx2 = `${tor.toString(16)}${tam.toString(16)}`.padStart(2, 0);
         const relx2 = `${rel.toString(16)}`.padStart(2, 0);
         return [
             `${year}-${month}-${day2} ${tor2}:${tam2}:${rel3}`,
             `${year}-${months[month-1]}-${day2} ${tor2}:${tam2}:${rel3}`,
-            `${yearx}.${month}.${day2}.${tortamx2}.${relx2}`,
-            `${yearx}.${months[month-1]}.${day2}.${tortamx2}.${relx2}`,
+            `${yearx}.${month}.${dayx2}.${tortamx2}.${relx2}`,
+            `${yearx}.${months[month-1]}.${dayx2}.${tortamx2}.${relx2}`,
         ]
     };
 

@@ -54,19 +54,18 @@ const ui = ($ => {
     };
 
     const erm2Strings = (year, month, day, tor, tam, rel) => {
-        const year4 = `${year}`.padStart(4, 0);
         const day2 = `${day}`.padStart(2, 0);
         const tor2 = `${tor}`.padStart(2, 0);
         const tam2 = `${tam}`.padStart(2, 0);
         const rel3 = `${rel}`.padStart(3, 0);
-        const yearx4 = `${year.toString(16)}`.padStart(4, 0);
+        const yearx = `${year.toString(16)}`;
         const tortamx2 = `${tor.toString(16)}${tam.toString(16)}`.padStart(2, 0);
         const relx2 = `${rel.toString(16)}`.padStart(2, 0);
         return [
-            `${year4}-${month}-${day2} ${tor2}:${tam2}:${rel3}`,
-            `${year4}-${months[month-1]}-${day2} ${tor2}:${tam2}:${rel3}`,
-            `${yearx4}.${month}.${day2}.${tortamx2}.${relx2}`,
-            `${yearx4}.${months[month-1]}.${day2}.${tortamx2}.${relx2}`,
+            `${year}-${month}-${day2} ${tor2}:${tam2}:${rel3}`,
+            `${year}-${months[month-1]}-${day2} ${tor2}:${tam2}:${rel3}`,
+            `${yearx}.${month}.${day2}.${tortamx2}.${relx2}`,
+            `${yearx}.${months[month-1]}.${day2}.${tortamx2}.${relx2}`,
         ]
     };
 

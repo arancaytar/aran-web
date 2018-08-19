@@ -40,7 +40,7 @@ const ui = ($ => {
       chunks.push(sequence.slice(i, i+k));
     }
     return chunks;
-  }
+  };
 
   const decodeBytes = (base, encoding, input) =>
     readChars[encoding](readBytes[base](input));
@@ -54,7 +54,8 @@ const ui = ($ => {
     const x = stripped.match(bad);
     if (x) throw `Bad character ${x[0]}`;
     return stripped;
-  }
+  };
+
   readBytes[2] = input => getChunks(8, stripDown(/[^01]/g, input)).map(s => parseInt(s, 2));
   readBytes[8] = input => getChunks(3, stripDown(/[^0-7]/g, input)).map(s => parseInt(s, 8));
   readBytes[10] = input => stripDown(/[^0-9\s]/g, input, false).split(/\s+/).map(s => parseInt(s));
@@ -68,7 +69,7 @@ const ui = ($ => {
     const x = fromBase64[char];
     if (x !== undefined) return x;
     throw `Invalid character ${char}`;
-  }
+  };
   readBytes[64] = string => {
     const bytes = [];
     const padding = string.match(/=*$/)[0].length;
@@ -88,13 +89,13 @@ const ui = ($ => {
       }
     }
     return bytes.slice(0, bytes.length - padding);
-  }
+  };
 
   const readChars = {};
   readChars.utf8 = bytes => {
     const assert = i => {
       if (bytes[i] & 192 !== 128) throw `Bad byte ${bytes[i].toString(16)} at #${i}`;
-    }
+    };
     let i = 0;
     let output = '';
     while (i < bytes.length) {
@@ -123,9 +124,9 @@ const ui = ($ => {
         output += String.fromCharCode(code);
       }
     }
-
     return output;
   };
+
   readChars.utf16 = bytes => {
     const bytes2 = getChunks(2, bytes).map(([a,b]) => a << 8 | b);
     let i = 0;
@@ -142,11 +143,12 @@ const ui = ($ => {
       }
     }
     return output;
-  }
+  };
+
   readChars.utf32 = bytes => getChunks(4, bytes)
     .map(([a,b,c,d]) => (a << 24) | (b << 16) | (c << 8) | d)
     .map(s => String.fromCharCode(s))
-    .join('')
+    .join('');
 
   const encodeBytes = (base, encoding, input) =>
     writeBytes[base](toBytes[encoding](input))
@@ -171,7 +173,7 @@ const ui = ($ => {
        + toBase64[code & 0x3f];
     }
     return output.slice(0, output.length - padding) + Array(padding).fill('=').join('');
-  }
+  };
 
   const toBytes = {};
   toBytes.utf8 = string => {
@@ -201,7 +203,7 @@ const ui = ($ => {
       }
     }
     return bytes;
-  }
+  };
   toBytes.utf16 = string => {
     const bytes = [];
     for (let i = 0; i < string.length; i++) {
@@ -219,7 +221,7 @@ const ui = ($ => {
       }
     }
     return bytes;
-  }
+  };
   toBytes.utf32 = string => {
     const bytes = [];
     for (let i = 0; i < string.length; i++) {
@@ -227,8 +229,7 @@ const ui = ($ => {
       bytes.push(char >> 24, (char >> 16) & 0xff, (char >> 8) & 0xff, char & 0xff);
     }
     return bytes;
-  }
-
+  };
 
   for (let option in options) {
     const html = `<option value="${option}">${options[option]}</option>`;
@@ -248,7 +249,7 @@ const ui = ($ => {
     catch (e) {
       dom.output.innerHTML = `<span class="error">${e}</span>`;
     }
-  }
+  };
 
   dom.source.oninput = dom.target.oninput = dom.input.oninput = run;
 

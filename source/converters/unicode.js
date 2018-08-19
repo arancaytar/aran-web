@@ -6,16 +6,8 @@ const ui = ($ => {
     source_base: $('#source_base'),
     target: $('#target'),
     target_base: $('#target_base'),
-  };
-
-  const options = {'raw': 'Raw', 'u16': 'Charcodes'};
-  const formats = {};
-  formats.raw = {decode: a => a, encode: a => a};
-  formats.u16 = {
-    decode: a => stripDown(/[^0-9a-f\s]/g, a.toLowerCase(), false).split(/\s+/)
-      .map(s => String.fromCharCode(parseInt(s, 16)))
-      .join(''),
-    encode: a => Array.from(a).map(s => s.charCodeAt().toString(16)).join(' ')
+    swap: $('#swap'),
+    swap_input: $('#swap_input'),
   };
 
   const bases = {
@@ -23,11 +15,40 @@ const ui = ($ => {
     8: 'Octal',
     10: 'Decimal',
     16: 'Hexadecimal',
-    64: 'Base64'
+    64: 'Base64',
+    256: 'PGP word',
   };
-  const encodings = {'utf8': 'UTF-8', 'utf16': 'UTF-16', 'utf32': 'UTF-32 / UCS-4'};
+  const special_bases = {
+    64: {read: atob, write: btoa},
+    256: {
+      read: word => {
+        const byte = reverse_words[word];
+        if (byte !== undefined) return String.fromCharCode(byte);
+        throw `Unrecognized word "${word}".`;
+      },
+      write: (byte, i) => {
+        const c = words[byte.charCodeAt()];
+        if (c) return c[i % 2];
+        throw `Bad value ${byte.charCodeAt()}; PGP words only encode bytes.`;
+      }
+    }
+  };
 
-  for (let encoding in encodings) for (let base in bases) formats[`${encoding}-${base}`] = {base, encoding};
+  const options = {'raw': 'Raw'};
+  const formats = {};
+  formats.raw = {decode: a => a, encode: a => a};
+  formats.charcodes = {
+    decode: (a, base) => stripDown(/[^0-9a-f\s]/g, a.toLowerCase(), false).split(/\s+/)
+      .map(
+        base < 64 ? s => String.fromCharCode(parseInt(s, base)) : special_bases[base].read
+      )
+      .join(''),
+    encode: (a, base) => Array.from(a).map(
+      base < 64 ? s => s.charCodeAt().toString(base) : special_bases[base].write
+    ).join(' ')
+  };
+
+  const encodings = {'utf8': 'UTF-8', 'utf16': 'UTF-16', 'utf32': 'UTF-32 / UCS-4', 'charcodes': 'Charcodes'};
   for (let encoding in encodings) options[encoding] = `${encodings[encoding]}`;
 
   const getChunks = (k, sequence) => {
@@ -39,11 +60,10 @@ const ui = ($ => {
     return chunks;
   };
 
-  const decodeBytes = (base, encoding, input) =>
-    readChars[encoding](readBytes[base](input));
-  const decode = (input, source) =>
-    formats[source].base ? decodeBytes(formats[source].base, formats[source].encoding, input)
-                         : formats[source].decode(input);
+  const decode = (input, encoding, base) =>
+    formats[encoding] ?
+      formats[encoding].decode(input, base) :
+      readChars[encoding](readBytes[base](input));
 
   const readBytes = [];
   const stripDown = (bad, s, spaces=true) => {
@@ -57,6 +77,7 @@ const ui = ($ => {
   readBytes[8] = input => getChunks(3, stripDown(/[^0-7]/g, input)).map(s => parseInt(s, 8));
   readBytes[10] = input => stripDown(/[^0-9\s]/g, input, false).split(/\s+/).map(s => parseInt(s));
   readBytes[16] = input => getChunks(2, stripDown(/[^0-9a-f]/g, input.toLowerCase())).map(s => parseInt(s, 16));
+  readBytes[256] = input => input.toLowerCase().split(/\s+/).map(special_bases[256].read).map(s => s.charCodeAt());
 
   const fromBase64 = {};
   const toBase64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -147,11 +168,9 @@ const ui = ($ => {
     .map(s => String.fromCharCode(s))
     .join('');
 
-  const encodeBytes = (base, encoding, input) =>
-    writeBytes[base](toBytes[encoding](input))
-  const encode = (input, target) =>
-    formats[target].base ? encodeBytes(formats[target].base, formats[target].encoding, input)
-      : formats[target].encode(input);
+  const encode = (input, encoding, base) =>
+    formats[encoding] ? formats[encoding].encode(input, base) :
+      writeBytes[base](toBytes[encoding](input));
 
   const writeBytes = [];
   const l = {2: 8, 8: 3, 10: 1, 16: 2};
@@ -171,6 +190,7 @@ const ui = ($ => {
     }
     return output.slice(0, output.length - padding) + Array(padding).fill('=').join('');
   };
+  writeBytes[256] = bytes => bytes.map(String.fromCharCode).map(special_bases[256].write).join(' ');
 
   const toBytes = {};
   toBytes.utf8 = string => {
@@ -239,8 +259,6 @@ const ui = ($ => {
     dom.target_base.insertAdjacentHTML('beforeend', html);
   }
 
-  const get_format = (encoding, base) => encoding in encodings ? `${encoding}-${base}` : encoding;
-
   const run = () => {
     const source = dom.source.value;
     dom.source_base.style.visibility = (source in encodings) ? 'visible' : 'hidden';
@@ -248,8 +266,8 @@ const ui = ($ => {
     dom.target_base.style.visibility = (target in encodings) ? 'visible' : 'hidden';
     const input = dom.input.value;
     try {
-      const raw = decode(input, get_format(source, dom.source_base.value));
-      const output = encode(raw, get_format(target, dom.target_base.value));
+      const raw = decode(input, source, dom.source_base.value);
+      const output = encode(raw, target, dom.target_base.value);
       dom.output.innerText = output;
     }
     catch (e) {
@@ -258,6 +276,16 @@ const ui = ($ => {
   };
 
   dom.source.oninput = dom.source_base.oninput = dom.target.oninput = dom.target_base.oninput = dom.input.oninput = run;
+  dom.swap.onclick = () => {
+    [dom.source.value, dom.source_base.value, dom.target.value, dom.target_base.value, dom.input.value] =
+      [dom.target.value, dom.target_base.value, dom.source.value, dom.source_base.value, dom.output.innerText];
+    run();
+  };
+  dom.swap_input.onclick = () => {
+    dom.input.value = dom.output.innerText;
+    run();
+  };
+
   run();
 
   return {dom, run, encode, decode, readBytes, writeBytes};

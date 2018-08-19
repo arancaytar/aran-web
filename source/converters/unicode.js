@@ -3,10 +3,12 @@ const ui = ($ => {
     input: $('#input'),
     output: $('#output'),
     source: $('#source'),
-    target: $('#target')
+    source_base: $('#source_base'),
+    target: $('#target'),
+    target_base: $('#target_base'),
   };
 
-  const options = {'raw': 'Raw', 'u16': 'Unicode (hex, space-separated)'};
+  const options = {'raw': 'Raw', 'u16': 'Charcodes'};
   const formats = {};
   formats.raw = {decode: a => a, encode: a => a};
   formats.u16 = {
@@ -25,13 +27,8 @@ const ui = ($ => {
   };
   const encodings = {'utf8': 'UTF-8', 'utf16': 'UTF-16', 'utf32': 'UTF-32 / UCS-4'};
 
-  for (let encoding in encodings) {
-    for (let base in bases) {
-      const name = `${encoding}-${base}`;
-      formats[name] = {base, encoding};
-      options[name] = `${encodings[encoding]} (${bases[base]})`;
-    }
-  }
+  for (let encoding in encodings) for (let base in bases) formats[`${encoding}-${base}`] = {base, encoding};
+  for (let encoding in encodings) options[encoding] = `${encodings[encoding]}`;
 
   const getChunks = (k, sequence) => {
     if (0 !== sequence.length % k) throw `Input length must be a multiple of ${k}.`;
@@ -44,7 +41,7 @@ const ui = ($ => {
 
   const decodeBytes = (base, encoding, input) =>
     readChars[encoding](readBytes[base](input));
-  const decode = (source, input) =>
+  const decode = (input, source) =>
     formats[source].base ? decodeBytes(formats[source].base, formats[source].encoding, input)
                          : formats[source].decode(input);
 
@@ -152,7 +149,7 @@ const ui = ($ => {
 
   const encodeBytes = (base, encoding, input) =>
     writeBytes[base](toBytes[encoding](input))
-  const encode = (target, input) =>
+  const encode = (input, target) =>
     formats[target].base ? encodeBytes(formats[target].base, formats[target].encoding, input)
       : formats[target].encode(input);
 
@@ -236,14 +233,23 @@ const ui = ($ => {
     dom.source.insertAdjacentHTML('beforeend', html);
     dom.target.insertAdjacentHTML('beforeend', html);
   }
+  for (let base in bases) {
+    const html = `<option value="${base}">${bases[base]}</option>`;
+    dom.source_base.insertAdjacentHTML('beforeend', html);
+    dom.target_base.insertAdjacentHTML('beforeend', html);
+  }
+
+  const get_format = (encoding, base) => encoding in encodings ? `${encoding}-${base}` : encoding;
 
   const run = () => {
     const source = dom.source.value;
+    dom.source_base.style.visibility = (source in encodings) ? 'visible' : 'hidden';
     const target = dom.target.value;
+    dom.target_base.style.visibility = (target in encodings) ? 'visible' : 'hidden';
     const input = dom.input.value;
     try {
-      const raw = decode(source, input);
-      const output = encode(target, raw);
+      const raw = decode(input, get_format(source, dom.source_base.value));
+      const output = encode(raw, get_format(target, dom.target_base.value));
       dom.output.innerText = output;
     }
     catch (e) {
@@ -251,7 +257,8 @@ const ui = ($ => {
     }
   };
 
-  dom.source.oninput = dom.target.oninput = dom.input.oninput = run;
+  dom.source.oninput = dom.source_base.oninput = dom.target.oninput = dom.target_base.oninput = dom.input.oninput = run;
+  run();
 
   return {dom, run, encode, decode, readBytes, writeBytes};
 })(

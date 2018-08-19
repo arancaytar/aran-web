@@ -5,8 +5,8 @@ scripts: ['unicode.js']
 This is a near-universal converter for various Unicode encodings.
 
 <textarea id="input" rows="5"></textarea>
-<label for="source">Source:</label> <select id="source"></select>
-<label for="target">Target:</label> <select id="target"></select>
+<label for="source">Source:</label> <select id="source"></select> <select id="source_base"></select>
+<label for="target">Target:</label> <select id="target"></select> <select id="target_base"></select>
 <div id="output" class="box code break"></div>
 
 ## Supported formats
@@ -34,5 +34,5 @@ The `Raw` format simply prints the string as it should be presented. Note that
 most valid code points are either unassigned or do not have a glyph in the
 current font; characters may either be missing or presented as a square box.
 
-The `Unicode` format is a space-separated sequence of the code points in hex format.
+The `Charcodes` format is a space-separated sequence of the code points in hex format.
 It's equivalent to UCS-4 aside from replacing the zero-padding with space delimiters.

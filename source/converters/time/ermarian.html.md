@@ -23,6 +23,7 @@ of 22nd century Earth.
 
 The Ermariani date format consists of a year, month, and day, and its time format consists of a
 *tor*, *tam*, and *rel*, which are divisions of 1/16, 1/256 and 1/65536 of a day, respectively.
+One *rel* is approximately 1.4857 seconds.
 
 In standard notation, all numbers are given in hexadecimal format, separated by `.` (except between *tor* and *tam*).
 

@@ -72,8 +72,8 @@ const ui = ($ => {
 
     const string2Erm = text => {
         const m = (s =>
-            s.match(/^(\d{1,4})-([1-8]|eve|rem|sun|rad|emp|lea|ice|fro)-(\d{1,2}) (\d{2}):(\d{2}):(\d{1,3})()$/) ||
-            s.match(/^([a-f\d]{1,4})\.([1-8]|eve|rem|sun|rad|emp|lea|ice|fro)\.([a-f\d]{1,2})\.([a-f\d])([a-f\d]).([a-f\d]{2})$/)
+            s.match(/^(-?\d{1,4})-([1-8]|eve|rem|sun|rad|emp|lea|ice|fro)-(\d{1,2}) (\d{2}):(\d{2}):(\d{1,3})()$/) ||
+            s.match(/^(-?[a-f\d]{1,4})\.([1-8]|eve|rem|sun|rad|emp|lea|ice|fro)\.([a-f\d]{1,2})\.([a-f\d])([a-f\d]).([a-f\d]{2})$/)
         )(text.toLowerCase());
 
         if (!m) throw 'Unrecognized date format.';

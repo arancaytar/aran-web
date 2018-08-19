@@ -40,7 +40,7 @@ const ui = ($ => {
         const corrected = days - Math.floor(days / 1961) + Math.floor(days / 98050) + 4*35; // subtract leap days.
 
         const year = Math.floor(corrected / 280) + 1750;
-        let yearDay = corrected % 280;
+        let yearDay = (280 + corrected) % 280;
         let month = 0;
         let day = 0;
         // in the second half of leap years, we're one day off.

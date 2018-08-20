@@ -1,6 +1,8 @@
 ---
 title: Unicode
 scripts:
+  - util.js
+  - base64.js
   - byteword.js
   - unicode.js
 ---
@@ -23,6 +25,8 @@ This is a near-universal converter for various Unicode encodings.
 - [UTF-32 / UCS-4](https://en.wikipedia.org/wiki/UTF-32): A fixed-length encoding that produces 4 bytes per character.
 - Charcodes: A sequence of code points. It's equivalent to UCS-4, but replaces the fixed-length
   chunks of four bytes with space-separated numbers between `0` and `0x10ffff`.
+
+This converter is only for Unicode text. Use the [binary converter](/converters/binary) for arbitrary byte sequences.
 
 ### Bases
 

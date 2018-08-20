@@ -21,16 +21,8 @@ const ui = ($ => {
   const special_bases = {
     64: {read: atob, write: btoa},
     256: {
-      read: word => {
-        const byte = reverse_words[word];
-        if (byte !== undefined) return String.fromCharCode(byte);
-        throw `Unrecognized word "${word}".`;
-      },
-      write: (byte, i) => {
-        const c = words[byte.charCodeAt()];
-        if (c) return c[i % 2];
-        throw `Bad value ${byte.charCodeAt()}; PGP words only encode bytes.`;
-      }
+      read: byteword.readByte,
+      write: byteword.writeByte,
     }
   };
 
@@ -51,15 +43,6 @@ const ui = ($ => {
   const encodings = {'utf8': 'UTF-8', 'utf16': 'UTF-16', 'utf32': 'UTF-32 / UCS-4', 'charcodes': 'Charcodes'};
   for (let encoding in encodings) options[encoding] = `${encodings[encoding]}`;
 
-  const getChunks = (k, sequence) => {
-    if (0 !== sequence.length % k) throw `Input length must be a multiple of ${k}.`;
-    const chunks = [];
-    for (let i = 0; i < sequence.length; i += k) {
-      chunks.push(sequence.slice(i, i+k));
-    }
-    return chunks;
-  };
-
   const decode = (input, encoding, base) =>
     formats[encoding] ?
       formats[encoding].decode(input, base) :
@@ -73,10 +56,10 @@ const ui = ($ => {
     return stripped;
   };
 
-  readBytes[2] = input => getChunks(8, stripDown(/[^01]/g, input)).map(s => parseInt(s, 2));
-  readBytes[8] = input => getChunks(3, stripDown(/[^0-7]/g, input)).map(s => parseInt(s, 8));
+  readBytes[2] = input => util.getChunks(8, stripDown(/[^01]/g, input)).map(s => parseInt(s, 2));
+  readBytes[8] = input => util.getChunks(3, stripDown(/[^0-7]/g, input)).map(s => parseInt(s, 8));
   readBytes[10] = input => stripDown(/[^0-9\s]/g, input, false).split(/\s+/).map(s => parseInt(s));
-  readBytes[16] = input => getChunks(2, stripDown(/[^0-9a-f]/g, input.toLowerCase())).map(s => parseInt(s, 16));
+  readBytes[16] = input => util.getChunks(2, stripDown(/[^0-9a-f]/g, input.toLowerCase())).map(s => parseInt(s, 16));
   readBytes[256] = input => input.toLowerCase().split(/\s+/).map(special_bases[256].read).map(s => s.charCodeAt());
 
   const fromBase64 = {};
@@ -88,26 +71,7 @@ const ui = ($ => {
     if (x !== undefined) return x;
     throw `Invalid character ${char}`;
   };
-  readBytes[64] = string => {
-    const bytes = [];
-    const padding = string.match(/=*$/)[0].length;
-    string = string.replace(/=/g, 'A');
-    const chunks = getChunks(4, string);
-    for (let i = 0; i < chunks.length; i++) {
-      try {
-        const codes = Array.from(chunks[i]).map(decodeChar64);
-        bytes.push(
-          (codes[0] << 2) | (codes[1] >> 4),
-          ((codes[1] & 0xf) << 4) | (codes[2] >> 2),
-          ((codes[2] & 0x3) << 6) | codes[3]
-        );
-      }
-      catch (e) {
-        throw `${e} in block #${4*i}..${4*i+3}`;
-      }
-    }
-    return bytes.slice(0, bytes.length - padding);
-  };
+  readBytes[64] = base64.read;
 
   const readChars = {};
   readChars.utf8 = bytes => {
@@ -146,7 +110,7 @@ const ui = ($ => {
   };
 
   readChars.utf16 = bytes => {
-    const bytes2 = getChunks(2, bytes).map(([a,b]) => a << 8 | b);
+    const bytes2 = util.getChunks(2, bytes).map(([a,b]) => a << 8 | b);
     let i = 0;
     let output = '';
     while (i < bytes2.length) {
@@ -163,7 +127,7 @@ const ui = ($ => {
     return output;
   };
 
-  readChars.utf32 = bytes => getChunks(4, bytes)
+  readChars.utf32 = bytes => util.getChunks(4, bytes)
     .map(([a,b,c,d]) => (a << 24) | (b << 16) | (c << 8) | d)
     .map(s => String.fromCharCode(s))
     .join('');
@@ -175,21 +139,7 @@ const ui = ($ => {
   const writeBytes = [];
   const l = {2: 8, 8: 3, 10: 1, 16: 2};
   for (let i of [2, 8, 10, 16]) writeBytes[i] = s => s.map(b => b.toString(i).padStart(l[i], '0')).join(' ');
-  writeBytes[64] = bytes => {
-    let output = "";
-    const padding = 3 - (bytes.length % 3);
-    bytes.push(...Array(padding).fill(0));
-    const chunks = getChunks(3, bytes);
-    for (let i = 0; i < chunks.length; i++) {
-      const chunk = chunks[i];
-      const code = (chunk[0] << 16) | (chunk[1] << 8) | chunk[2];
-      output += toBase64[code >> 18]
-       + toBase64[(code >> 12) & 0x3f]
-       + toBase64[(code >> 6) & 0x3f]
-       + toBase64[code & 0x3f];
-    }
-    return output.slice(0, output.length - padding) + Array(padding).fill('=').join('');
-  };
+  writeBytes[64] = base64.write;
   writeBytes[256] = bytes => bytes.map(String.fromCharCode).map(special_bases[256].write).join(' ');
 
   const toBytes = {};

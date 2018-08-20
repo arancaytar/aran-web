@@ -15,6 +15,9 @@ links:
   converters:
     name: Converters
     links:
+      binary:
+        name: Binary
+        path: /converters/binary
       ciphers:
         name: Ciphers
         links:

@@ -91,7 +91,8 @@ const ui = (($, base64) => {
   const run = () => {
     dom.type.style.visibility = (['link', 'image'].includes(dom.target.value)) ? 'visible' : 'hidden';
     try {
-      const output = convert(dom.input.value, dom.source.value, dom.target.value, {type: dom.type.value});
+      const input = dom.input.value.trim();
+      const output = input && convert(input, dom.source.value, dom.target.value, {type: dom.type.value});
       if (output instanceof HTMLElement) {
         dom.output.innerHTML = '';
         dom.output.appendChild(output);

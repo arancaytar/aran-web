@@ -19,25 +19,24 @@ const ui = ($ => {
     256: 'PGP word',
   };
   const special_bases = {
-    64: {read: atob, write: btoa},
-    256: {
-      read: byteword.readByte,
-      write: byteword.writeByte,
-    }
+    64: base64,
+    256: byteword,
   };
 
   const options = {'raw': 'Raw'};
   const formats = {};
   formats.raw = {decode: a => a, encode: a => a};
   formats.charcodes = {
-    decode: (a, base) => stripDown(/[^0-9a-f\s]/g, a.toLowerCase(), false).split(/\s+/)
+    decode: (a, base) => stripDown(/[^0-9a-z\s]/g, a.toLowerCase(), false).split(/\s+/)
       .map(
-        base < 64 ? s => String.fromCharCode(parseInt(s, base)) : special_bases[base].read
+        base < 64 ? s => parseInt(s, base) : special_bases[base].read
       )
+      .map(x => String.fromCharCode(x))
       .join(''),
-    encode: (a, base) => Array.from(a).map(
-      base < 64 ? s => s.charCodeAt().toString(base) : special_bases[base].write
-    ).join(' ')
+    encode: (a, base) => {
+      if (base > 36) throw `Charcodes are numbers up till 0x10FFFF, and cannot be represented in byte-level bases like Base64 or PGP words.`;
+      return Array.from(a).map(s => s.charCodeAt()).map(s => s.toString(base)).join(' ');
+    }
   };
 
   const encodings = {'utf8': 'UTF-8', 'utf16': 'UTF-16', 'utf32': 'UTF-32 / UCS-4', 'charcodes': 'Charcodes'};
@@ -60,18 +59,8 @@ const ui = ($ => {
   readBytes[8] = input => util.getChunks(3, stripDown(/[^0-7]/g, input)).map(s => parseInt(s, 8));
   readBytes[10] = input => stripDown(/[^0-9\s]/g, input, false).split(/\s+/).map(s => parseInt(s));
   readBytes[16] = input => util.getChunks(2, stripDown(/[^0-9a-f]/g, input.toLowerCase())).map(s => parseInt(s, 16));
-  readBytes[256] = input => input.toLowerCase().split(/\s+/).map(special_bases[256].read).map(s => s.charCodeAt());
-
-  const fromBase64 = {};
-  const toBase64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
-  for (let c = 0; c < 64; c++) fromBase64[toBase64[c]] = c;
-
-  const decodeChar64 = char => {
-    const x = fromBase64[char];
-    if (x !== undefined) return x;
-    throw `Invalid character ${char}`;
-  };
   readBytes[64] = base64.read;
+  readBytes[256] = byteword.read;
 
   const readChars = {};
   readChars.utf8 = bytes => {
@@ -91,14 +80,17 @@ const ui = ($ => {
         output += String.fromCharCode(code);
       }
       else if (bytes[i] < 0xf0) {
-        assert(i+1, i+2);
+        assert(i+1);
+        assert(i+2);
         const code = ((bytes[i++] & 0xf) << 12)
          | ((bytes[i++] & 0x3f) << 6)
          | (bytes[i++] & 0x3f);
          output += String.fromCharCode(code);
       }
       else {
-        assert(i, i+2, i+3);
+        assert(i+1);
+        assert(i+2);
+        assert(i+3);
         const code = ((bytes[i++] & 0x7) << 24)
          | ((bytes[i++] & 0x3f) << 18)
          | ((bytes[i++] & 0x3f) << 12)
@@ -140,7 +132,7 @@ const ui = ($ => {
   const l = {2: 8, 8: 3, 10: 1, 16: 2};
   for (let i of [2, 8, 10, 16]) writeBytes[i] = s => s.map(b => b.toString(i).padStart(l[i], '0')).join(' ');
   writeBytes[64] = base64.write;
-  writeBytes[256] = bytes => bytes.map(String.fromCharCode).map(special_bases[256].write).join(' ');
+  writeBytes[256] = byteword.write;
 
   const toBytes = {};
   toBytes.utf8 = string => {
@@ -214,7 +206,8 @@ const ui = ($ => {
     dom.source_base.style.visibility = (source in encodings) ? 'visible' : 'hidden';
     const target = dom.target.value;
     dom.target_base.style.visibility = (target in encodings) ? 'visible' : 'hidden';
-    const input = dom.input.value;
+    const input = dom.input.value.trim();
+    if (!input) return;
     try {
       const raw = decode(input, source, dom.source_base.value);
       const output = encode(raw, target, dom.target_base.value);

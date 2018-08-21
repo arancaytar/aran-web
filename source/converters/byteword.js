@@ -8,10 +8,10 @@ const byteword = (() => {
   const readByte = word => {
     const word2 = word.toLowerCase();
     if (word2 in reverse_words) return reverse_words[word2];
-    else throw `Unrecognized word "${word}.`;
+    else throw `Unrecognized word "${word}". Did you mean ${closest(word).join(', ')}?`;
   };
   const writeByte = (byte, i) => {
-    if (byte < 0 || byte > 255) throw `Invalid byte 0x${byte.toString(16)}`;
+    if (byte < 0 || byte > 255) throw `Invalid byte 0x${byte.toString(16)}.`;
     return words[byte][(i%2 + 2) % 2];
   };
   const read = string => {
@@ -23,5 +23,35 @@ const byteword = (() => {
     return bytes.map(writeByte).join(' ');
   };
 
-  return {read, readByte, write, writeByte};
+  const closest = word => {
+    let best = [];
+    let score = word.length*100;
+    for (let c in reverse_words) {
+      const d = levenshtein(word, c);
+      if (d < score) {
+        best = [c];
+        score = d;
+      }
+      else if (d === c) {
+        best.push(c);
+      }
+    }
+    return best;
+  };
+
+  const levenshtein = (a,b) => {
+    const M = new Array(a.length * b.length);
+    for (let i = 0; i < a.length; i++) M[i*b.length] = i;
+    for (let j = 0; j < b.length; j++) M[j] = j;
+    for (let i = 1; i < a.length; i++)
+      for (let j = 1; j < b.length; j++)
+        M[i*b.length + j] = Math.min(
+          M[(i-1)*b.length+j] + 1,
+          M[i*b.length + j-1] + 1,
+          M[(i-1)*b.length+j-1] + (a[i] !== b[j])
+        );
+    return M[a.length*b.length-1];
+  };
+
+  return {read, readByte, write, writeByte, levenshtein};
 })();

@@ -14,7 +14,7 @@ const ui = (($, base64) => {
   }
 
   const representations = {
-    raw: {
+    ascii: {
       label: 'ASCII',
       read: s => Array.from(
         s.replace(/\\([0-9a-fA-F]{2})/g, (_, p) => String.fromCharCode(parseInt(p, 16)))
@@ -78,13 +78,21 @@ const ui = (($, base64) => {
   const link = url => {
     const a = document.createElement('a');
     a.setAttribute('href', url);
+    a.setAttribute('download', '');
     return a;
   };
   const writeDataURL = (b, type) => `data:${type};base64,` + base64.write(b);
 
+  // Technically, the only reader that can cause this is the decimal one.
+  const validate = bytes => {
+    const bad = bytes.filter(x => x < 0 || x > 255);
+    if (bad.length) throw `Invalid byte value ${bad[0]}`;
+    return bytes;
+  };
+
   const convert = (input, source, target, opts) =>
     representations[target].write(
-      representations[source].read(input, opts),
+      validate(representations[source].read(input, opts)),
       opts
     );
 
@@ -100,7 +108,7 @@ const ui = (($, base64) => {
       else dom.output.innerText = output;
     }
     catch (e) {
-      dom.output.innerText = e;
+      dom.output.innerHTML = `<span class="error">${e}</span>`;
     }
   };
 

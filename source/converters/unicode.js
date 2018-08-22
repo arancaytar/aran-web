@@ -1,4 +1,4 @@
-const ui = ($ => {
+const ui = (($, $$) => {
   const dom = {
     input: $('#input'),
     output: $('#output'),
@@ -25,27 +25,38 @@ const ui = ($ => {
 
   const options = {'raw': 'Raw'};
   const formats = {};
-  formats.raw = {decode: a => a, encode: a => a};
-  formats.charcodes = {
-    decode: (a, base) => stripDown(/[^0-9a-z\s]/g, a.toLowerCase(), false).split(/\s+/)
-      .map(
-        base < 64 ? s => parseInt(s, base) : special_bases[base].read
-      )
-      .map(x => String.fromCharCode(x))
-      .join(''),
-    encode: (a, base) => {
-      if (base > 36) throw `Charcodes are numbers up till 0x10FFFF, and cannot be represented in byte-level bases like Base64 or PGP words.`;
-      return Array.from(a).map(s => s.charCodeAt()).map(s => s.toString(base)).join(' ');
-    }
+  formats.raw = {
+    decode: string => Array.from(string).map(char => char.codePointAt()),
+    encode: chars => chars.map(char => String.fromCodePoint(char)).join(''),
+  };
+  formats.codepoints = {
+    decode: (string, base) => assertUnicode(stripDown(/[^0-9a-z\s]/g, string.toLowerCase(), false)
+      .split(/\s+/)
+      .map(char => parseInt(char, base))),
+    encode: (chars, base) => chars.map(char => char.toString(base)).join(' '),
   };
 
-  const encodings = {'utf8': 'UTF-8', 'utf16': 'UTF-16', 'utf32': 'UTF-32 / UCS-4', 'charcodes': 'Charcodes'};
+  const assertUnicode = chars => {
+    const badChars = chars.filter(char => char < 0 || char > 0x10ffff);
+    if (badChars[0]) throw `Bad codepoint 0x${badChars[0].toString(16)}`;
+    return chars;
+  };
+
+  const encodings = {
+    utf8: 'UTF-8',
+    utf16: 'UTF-16',
+    utf32: 'UTF-32 / UCS-4',
+    codepoints: 'Codepoints',
+  };
   for (let encoding in encodings) options[encoding] = `${encodings[encoding]}`;
 
   const decode = (input, encoding, base) =>
     formats[encoding] ?
       formats[encoding].decode(input, base) :
-      readChars[encoding](readBytes[base](input));
+      readChars[encoding](assertBytes(readBytes[base](input)));
+  const encode = (input, encoding, base) =>
+    formats[encoding] ? formats[encoding].encode(input, base) :
+      writeBytes[base](toBytes[encoding](input));
 
   const readBytes = [];
   const stripDown = (bad, s, spaces=true) => {
@@ -53,6 +64,12 @@ const ui = ($ => {
     const x = stripped.match(bad);
     if (x) throw `Bad character ${x[0]}`;
     return stripped;
+  };
+
+  const assertBytes = bytes => {
+    const badBytes = bytes.filter(byte => byte < 0 || byte > 255);
+    if (badBytes[0]) throw `Bad byte 0x${badBytes[0].toString(16)}`;
+    return bytes;
   };
 
   readBytes[2] = input => util.getChunks(8, stripDown(/[^01]/g, input)).map(s => parseInt(s, 2));
@@ -64,69 +81,64 @@ const ui = ($ => {
 
   const readChars = {};
   readChars.utf8 = bytes => {
-    const assert = i => {
-      if (bytes[i] & 192 !== 128) throw `Bad byte ${bytes[i].toString(16)} at #${i}`;
-    };
+    const assert = (...j) => j.forEach(i => {
+      if (bytes[i] === undefined) throw `Incomplete byte sequence at end of input.`;
+      if (bytes[i] & 192 ^ 128) throw `Bad byte ${bytes[i].toString(16)} at #${i}.`;
+    });
+    const chars = [];
     let i = 0;
-    let output = '';
     while (i < bytes.length) {
       if (bytes[i] < 0x7f) {
-        output += String.fromCharCode(bytes[i++]);
+        chars.push(bytes[i++]);
       }
       else if (bytes[i] < 0xe0) {
         assert(i+1);
-        const code = ((bytes[i++] & 0x1f) << 6)
-         | (bytes[i++] & 0x3f);
-        output += String.fromCharCode(code);
+        chars.push(
+          ((bytes[i++] & 0x1f) << 6) |
+          (bytes[i++] & 0x3f)
+        );
       }
       else if (bytes[i] < 0xf0) {
-        assert(i+1);
-        assert(i+2);
-        const code = ((bytes[i++] & 0xf) << 12)
-         | ((bytes[i++] & 0x3f) << 6)
-         | (bytes[i++] & 0x3f);
-         output += String.fromCharCode(code);
+        assert(i+1, i+2);
+        chars.push(
+          ((bytes[i++] & 0xf) << 12) |
+          ((bytes[i++] & 0x3f) << 6) |
+          (bytes[i++] & 0x3f)
+        );
       }
       else {
-        assert(i+1);
-        assert(i+2);
-        assert(i+3);
-        const code = ((bytes[i++] & 0x7) << 24)
-         | ((bytes[i++] & 0x3f) << 18)
-         | ((bytes[i++] & 0x3f) << 12)
-         | ((bytes[i++] & 0x3f) << 6)
-        output += String.fromCharCode(code);
+        assert(i + 1, i + 2, i + 3);
+        chars.push(
+          ((bytes[i++] & 0x7) << 18) |
+          ((bytes[i++] & 0x3f) << 12) |
+          ((bytes[i++] & 0x3f) << 6) |
+          (bytes[i++] & 0x3f)
+        );
       }
     }
-    return output;
+    return chars;
   };
 
   readChars.utf16 = bytes => {
     const bytes2 = util.getChunks(2, bytes).map(([a,b]) => a << 8 | b);
     let i = 0;
-    let output = '';
+    const chars = [];
     while (i < bytes2.length) {
       if (bytes2[i] < 0xd800 || bytes2[i] >= 0xe000) {
-        output += String.fromCharCode(bytes2[i++]);
+        chars.push(bytes2[i++]);
       }
       else {
+        if (bytes2[i+1] === undefined) throw `Incomplete surrogate pair at end of input.`;
         if (bytes2[i] > 0xdbff) throw `Bad byte sequence ${bytes[i].toString(16)} at #${2*i}`;
         const high = bytes[i++] & 0x3ff;
         const low = bytes[i++] & 0x3ff;
-        output += String.fromCharCode((high << 10) | low);
+        chars.push((high << 10) | low);
       }
     }
-    return output;
+    return chars;
   };
-
   readChars.utf32 = bytes => util.getChunks(4, bytes)
-    .map(([a,b,c,d]) => (a << 24) | (b << 16) | (c << 8) | d)
-    .map(s => String.fromCharCode(s))
-    .join('');
-
-  const encode = (input, encoding, base) =>
-    formats[encoding] ? formats[encoding].encode(input, base) :
-      writeBytes[base](toBytes[encoding](input));
+    .map(([a,b,c,d]) => (a << 24) + (b << 16) + (c << 8) + d);
 
   const writeBytes = [];
   const l = {2: 8, 8: 3, 10: 1, 16: 2};
@@ -135,60 +147,47 @@ const ui = ($ => {
   writeBytes[256] = byteword.write;
 
   const toBytes = {};
-  toBytes.utf8 = string => {
-    const bytes = [];
-    for (let i = 0; i < string.length; i++) {
-      const char = string.charCodeAt(i);
-      if (char < 0x7f) {
-        bytes.push(char);
-      }
-      else if (char < 0x800) {
-        bytes.push(0xc0 | (char >> 6), 0x80 | (0x3f & char));
-      }
-      else if (char < 0x10000) {
-        bytes.push(
-          0xe0 | (char >> 12),
-          0x80 | (0x3f & (char >> 6)),
-          0x80 | (0x3f & char)
-        )
-      }
-      else {
-        bytes.push(
-          0xf0 | (char >> 18),
-          0x80 | (0x3f & (char >> 12)),
-          0x80 | (0x3f & (char >> 6)),
-          0x80 | (0x3f & char)
-        )
-      }
-    }
-    return bytes;
-  };
-  toBytes.utf16 = string => {
-    const bytes = [];
-    for (let i = 0; i < string.length; i++) {
-      const char = string.charCodeAt(i);
+  toBytes.utf8 = chars => [].concat(...
+    chars.map(char =>
+      (char < 0x7f) ? [char]
+    : (char < 0x800) ? [0xc0 | (char >> 6), 0x80 | (0x3f & char)]
+    : (char < 0x10000) ? [
+        0xe0 | (char >> 12),
+        0x80 | (0x3f & (char >> 6)),
+        0x80 | (0x3f & char)
+      ]
+    :
+      [
+        0xf0 | (char >> 18),
+        0x80 | (0x3f & (char >> 12)),
+        0x80 | (0x3f & (char >> 6)),
+        0x80 | (0x3f & char)
+      ]
+    )
+  );
+  toBytes.utf16 = chars => [].concat(...
+    chars.map(char => {
       if (char < 0xd800 || char >= 0xe000) {
-        bytes.push(char >> 8, char & 0xff);
+        return [char >> 8, char & 0xff];
       }
       else {
         const high = (char >> 10) | 0xd800;
         const low = (char >> 10) | 0xdc00;
-        bytes.push(
+        return [
           high >> 8, high & 0xff,
           low >> 8, low & 0xff
-        );
+        ];
       }
-    }
-    return bytes;
-  };
-  toBytes.utf32 = string => {
-    const bytes = [];
-    for (let i = 0; i < string.length; i++) {
-      const char = string.charCodeAt(i);
-      bytes.push(char >> 24, (char >> 16) & 0xff, (char >> 8) & 0xff, char & 0xff);
-    }
-    return bytes;
-  };
+    })
+  );
+  toBytes.utf32 = chars => [].concat(...
+    chars.map(char => [
+      char >> 24,
+      (char >> 16) & 0xff,
+      (char >> 8) & 0xff,
+      char & 0xff
+    ])
+  );
 
   for (let option in options) {
     const html = `<option value="${option}">${options[option]}</option>`;
@@ -203,11 +202,9 @@ const ui = ($ => {
 
   const run = () => {
     const source = dom.source.value;
-    dom.source_base.style.visibility = (source in encodings) ? 'visible' : 'hidden';
     const target = dom.target.value;
-    dom.target_base.style.visibility = (target in encodings) ? 'visible' : 'hidden';
     const input = dom.input.value.trim();
-    if (!input) return;
+    if (!input) return dom.output.innerText = '';
     try {
       const raw = decode(input, source, dom.source_base.value);
       const output = encode(raw, target, dom.target_base.value);
@@ -218,20 +215,31 @@ const ui = ($ => {
     }
   };
 
-  dom.source.oninput = dom.source_base.oninput = dom.target.oninput = dom.target_base.oninput = dom.input.oninput = run;
+  const updateOptions = () => {
+    dom.source_base.style.display = (dom.source.value in encodings) ? '' : 'none';
+    dom.target_base.style.display = (dom.target.value in encodings) ? '' : 'none';
+    Array.from($$('option[value="64"],option[value="256"]')).forEach(e => {
+      e.disabled = e.parentElement.previousElementSibling.value === 'codepoints';
+    });
+    run();
+  };
+
+  dom.source.oninput = dom.target.oninput = updateOptions;
+  dom.source_base.oninput =  dom.target_base.oninput = dom.input.oninput = run;
   dom.swap.onclick = () => {
     [dom.source.value, dom.source_base.value, dom.target.value, dom.target_base.value, dom.input.value] =
       [dom.target.value, dom.target_base.value, dom.source.value, dom.source_base.value, dom.output.innerText];
-    run();
+    updateOptions();
   };
   dom.swap_input.onclick = () => {
     dom.input.value = dom.output.innerText;
     run();
   };
 
-  run();
+  updateOptions();
 
   return {dom, run, encode, decode, readBytes, writeBytes};
 })(
   document.querySelector.bind(document),
+  document.querySelectorAll.bind(document),
 );

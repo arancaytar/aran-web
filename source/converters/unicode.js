@@ -124,15 +124,13 @@ const ui = (($, $$) => {
     let i = 0;
     const chars = [];
     while (i < bytes2.length) {
-      if (bytes2[i] < 0xd800 || bytes2[i] >= 0xe000) {
-        chars.push(bytes2[i++]);
+      if (bytes2[i] >= 0xd800 && bytes2[i] < 0xdc00 && bytes2[i+1] >= 0xdc00 && bytes2[i+1] < 0xe000) {
+        const high = bytes2[i++] & 0x3ff;
+        const low = bytes2[i++] & 0x3ff;
+        chars.push(((high << 10) | low) + 0x10000);
       }
       else {
-        if (bytes2[i+1] === undefined) throw `Incomplete surrogate pair at end of input.`;
-        if (bytes2[i] > 0xdbff) throw `Bad byte sequence ${bytes[i].toString(16)} at #${2*i}`;
-        const high = bytes[i++] & 0x3ff;
-        const low = bytes[i++] & 0x3ff;
-        chars.push((high << 10) | low);
+        chars.push(bytes2[i++]);
       }
     }
     return chars;
@@ -167,12 +165,13 @@ const ui = (($, $$) => {
   );
   toBytes.utf16 = chars => [].concat(...
     chars.map(char => {
-      if (char < 0xd800 || char >= 0xe000) {
+      if (char < 0x10000) {
         return [char >> 8, char & 0xff];
       }
       else {
-        const high = (char >> 10) | 0xd800;
-        const low = (char >> 10) | 0xdc00;
+        const char2 = char - 0x10000;
+        const high = (char2 >> 10) | 0xd800;
+        const low = (char2 & 0x3ff) | 0xdc00;
         return [
           high >> 8, high & 0xff,
           low >> 8, low & 0xff

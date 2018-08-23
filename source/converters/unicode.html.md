@@ -37,9 +37,10 @@ for arbitrary byte sequences.
 
 ### Bases
 
-Bytes can be represented in binary, octal, decimal or hexadecimal bases. The
-binary, octal and hexadecimal representations are padded to a fixed length (8, 3
-and 2 digits per byte); the decimal representation is space-separated.
+Numbers can be represented in binary, octal, decimal or hexadecimal bases.
+When encoding bytes, the binary, octal and hexadecimal representations are
+padded to a fixed length (8, 3 and 2 digits per byte). The decimal
+representation, and all representations of codepoints, are space-separated.
 
 [Base64](https://en.wikipedia.org/wiki/Base64) is a special encoding that
 represents byte sequences as alphanumeric characters (plus the characters

@@ -14,7 +14,10 @@ prefix-free code, then compressed into bytes using that code.
 <label for="source">Source</label><textarea id="source" rows="5"></textarea>
 <label for="tree">Code</label><textarea id="tree" rows="5"></textarea>
 <label for="bytes">Output</label><textarea id="bytes" rows="5"></textarea>
+
 <div id="stats"></div>
+
+<table id="code"></table>
 
 The compression statistics do not count the description of the code itself, which
 must also be transmitted as part of the text. The code is here shown as a JSON tree;

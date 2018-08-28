@@ -60,6 +60,7 @@ const ui = ($ => {
   const dom = {
     source: $('#source'),
     tree: $('#tree'),
+    code: $('#code'),
     bytes: $('#bytes'),
     error: $('#error'),
     stats: $('#stats'),
@@ -86,6 +87,7 @@ const ui = ($ => {
         error();
         const input = dom.source.value;
         const tree = input && huffman(input);
+        dom.code.innerHTML = huffman.code(tree).map(x => `<tr>${x.map(y => `<td>${y}</td>`).join('')}</tr>`).join('\n');
         dom.tree.value = input && JSON.stringify(tree);
         const bits = huffman.encode(tree, input);
         dom.stats.innerText = stats(input.length, bits.length);
@@ -99,6 +101,7 @@ const ui = ($ => {
       try {
         error();
         const tree = JSON.parse(dom.tree.value);
+        dom.code.innerHTML = huffman.code(tree).map(x => `<tr>${x.map(y => `<td>${y}</td>`)}</tr>`).join('\n');
         const bits = readBits(dom.bytes.value);
         dom.source.value = huffman.decode(tree, bits);
         dom.stats.innerText = stats(dom.source.value.length, bits.length);

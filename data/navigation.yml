@@ -30,6 +30,12 @@ links:
           vigenere:
             name: "Vigen\u00e9re"
             path: /converters/ciphers/vigenere
+      compression:
+        name: Compression
+        links:
+          huffman:
+            name: Huffman
+            path: /converters/compression/huffman
       coordinates:
         name: Coordinates
         path: /converters/coordinates

@@ -10,41 +10,43 @@ const base64 = (() => {
   };
 
   const decodeBytes64 = string => {
-    string = string.replace(/\s+/g, '');
-    const bytes = [];
-    const padding = string.match(/=*$/)[0].length;
-    string = string.replace(/=/g, 'A');
-    const chunks = util.getChunks(4, string);
-    for (let i = 0; i < chunks.length; i++) {
-      try {
-        const codes = Array.from(chunks[i]).map(decodeChar64);
-        bytes.push(
-          (codes[0] << 2) | (codes[1] >> 4),
-          ((codes[1] & 0xf) << 4) | (codes[2] >> 2),
-          ((codes[2] & 0x3) << 6) | codes[3]
-        );
-      }
-      catch (e) {
-        throw `${e} in block #${4*i}..${4*i+3}`;
-      }
-    }
-    return bytes.slice(0, bytes.length - padding);
+    const trimmed = string.replace(/\s+/g, '');
+    const padding = trimmed.match(/=*$/)[0].length;
+    return _.chain(string)
+      .replace(/=/g, 'A')
+      .chunk(4)
+      .map((chunk, i) => {
+        try {
+          const codes = Array.from(chunk).map(decodeChar64);
+          return [
+            (codes[0] << 2) | (codes[1] >> 4),
+            ((codes[1] & 0xf) << 4) | (codes[2] >> 2),
+            ((codes[2] & 0x3) << 6) | codes[3],
+          ];
+        }
+        catch (e) {
+          throw `${e} in block #${4*i}..${4*i+3}`;
+        }
+      })
+      .flatten()
+      .dropRight(padding)
+      .value();
   };
 
   const writeBytes64 = bytes => {
-    let output = "";
-    const padding = 3 - (bytes.length % 3);
-    bytes.push(...Array(padding).fill(0));
-    const chunks = util.getChunks(3, bytes);
-    for (let i = 0; i < chunks.length; i++) {
-      const chunk = chunks[i];
-      const code = (chunk[0] << 16) | (chunk[1] << 8) | chunk[2];
-      output += toBase64[code >> 18]
-        + toBase64[(code >> 12) & 0x3f]
-        + toBase64[(code >> 6) & 0x3f]
-        + toBase64[code & 0x3f];
-    }
-    return output.slice(0, output.length - padding) + Array(padding).fill('=').join('');
+    const padding = 3 - ((bytes.length - 1) % 3 + 1);
+    return _.chain(bytes)
+      .chunk(3)
+      .map(([a,b=0,c=0]) => [
+        a >> 2,
+        ((a & 0x3) << 4) + (b >> 4),
+        ((b & 0xf) << 2) + (c >> 6),
+        c & 0x3f
+      ])
+      .flatten()
+      .map(x => toBase64[x])
+      .dropRight(padding)
+      .join('') + _.repeat('=', padding);
   };
 
   return {

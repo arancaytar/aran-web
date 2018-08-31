@@ -16,33 +16,64 @@ const ui = (($, base64) => {
   const representations = {
     ascii: {
       label: 'ASCII',
-      read: s => Array.from(
-        s.replace(/\\([0-9a-fA-F]{2})/g, (_, p) => String.fromCharCode(parseInt(p, 16)))
-          .replace('\\\\', '\\')
-      ).map(s => s.charCodeAt()),
-      write: b => b.map(b =>
-        is_printable[b] ? String.fromCharCode(b).replace('\\', '\\\\') : `\\${b.toString(16).padStart(2, '0')}`
-      ).join(''),
+      read: s => _.chain(s)
+        .replace(/\\([0-9a-fA-F]{2})/g, (_, p) => String.fromCharCode(parseInt(p, 16)))
+        .replace('\\\\', '\\')
+        .map(s => s.charCodeAt())
+        .value(),
+      write: b => b
+        .map(b => is_printable[b] ?
+          String.fromCharCode(b).replace('\\', '\\\\') :
+          `\\${b.toString(16).padStart(2, '0')}`
+        )
+        .join(''),
     },
     binary: {
       label: 'Binary',
-      read: s => util.getChunks(8, s.replace(/[^01]/g, '')).map(s => parseInt(s, 2)),
-      write: b => b.map(b => b.toString(2).padStart(8, '0')).join(' '),
+      read: s => _.chain(s)
+        .replace(/[^01]/g, '')
+        .chunk(8)
+        .map(s => s.join(''))
+        .map(s => parseInt(s, 2))
+        .value(),
+      write: b => b
+        .map(b => b.toString(2).padStart(8, '0'))
+        .join(' '),
     },
     octal: {
       label: 'Octal',
-      read: s => util.getChunks(3, s.replace(/[^0-7]/g, '')).map(s => parseInt(s, 8)),
-      write: b => b.map(b => b.toString(8).padStart(3, '0')).join(' '),
+      read: s => _.chain(s)
+        .replace(/[^0-7]/g, '')
+        .chunk(3)
+        .map(s => s.join(''))
+        .map(s => parseInt(s, 8))
+        .value(),
+      write: b => b
+        .map(b => b.toString(8).padStart(3, '0'))
+        .join(' '),
     },
     decimal: {
       label: 'Decimal',
-      read: s => s.replace(/[^0-9\s]/g, '').split(/\s+/).map(s => parseInt(s)),
-      write: b => b.map(b => b.toString()).join(' '),
+      read: s => s
+        .replace(/[^0-9\s]/g, '')
+        .split(/\s+/)
+        .map(s => parseInt(s)),
+      write: b => b
+        .map(b => b.toString())
+        .join(' '),
     },
     hexadecimal: {
       label: 'Hexadecimal',
-      read: s => util.getChunks(2, s.toLowerCase().replace(/[^0-9a-f]/g, '')).map(s => parseInt(s, 16)),
-      write: b => b.map(b => b.toString(16).padStart(2, '0')).join(' ').replace(/(..) (..)/g, '$1$2'),
+      read: s => _.chain(s.toLowerCase())
+        .replace(/[^0-9a-f]/g, '')
+        .chunk(2)
+        .map(s => s.join(''))
+        .map(s => parseInt(s, 16))
+        .value(),
+      write: b => b
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join(' ')
+        .replace(/(..) (..)/g, '$1$2'),
     },
     base64: {
       label: 'Base64',

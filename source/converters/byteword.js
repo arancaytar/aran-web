@@ -66,44 +66,42 @@ const byteword = (() => {
     ['wayside', 'Wilmington'], ['willow', 'Wyoming'], ['woodlark', 'yesteryear'], ['Zulu', 'Yucatan']
   ];
 
-  const reverse_words = {};
-  for (let byte in words) {
-    reverse_words[words[byte][0].toLowerCase()] = reverse_words[words[byte][1].toLowerCase()] = +byte;
-  }
+  const reverse_words = _.chain(words)
+    .map(([a, b], i) => [
+      [a.toLowerCase(), i],
+      [b.toLowerCase(), i]
+    ])
+    .flatten()
+    .fromPairs()
+    .value();
 
   const readByte = word => {
-    const word2 = word.toLowerCase();
-    if (word2 in reverse_words) return reverse_words[word2];
-    else throw `Unrecognized word "${word}". Did you mean ${closest(word).join(', ')}?`;
+    const byte = reverse_words[word.toLowerCase()];
+    if (byte !== undefined) return byte;
+
+    throw `Unrecognized word "${word}". Did you mean ${closest(word).join(', ')}?`;
   };
+
   const writeByte = (byte, i) => {
     if (byte < 0 || byte > 255) throw `Invalid byte 0x${byte.toString(16)}.`;
     return words[byte][(i%2 + 2) % 2];
   };
+
   const read = string => {
     string = string.trim();
     if (!string) return [];
     return string.split(/\s+/).map(readByte);
   };
+
   const write = bytes => {
     return bytes.map(writeByte).join(' ');
   };
 
-  const closest = word => {
-    let best = [];
-    let score = word.length*100;
-    for (let c in reverse_words) {
-      const d = levenshtein(word, c);
-      if (d < score) {
-        best = [c];
-        score = d;
-      }
-      else if (d === c) {
-        best.push(c);
-      }
-    }
-    return best;
-  };
+  const closest = word => _.chain(reverse_words)
+    .keys()
+    .sortBy(candidate => levenshtein(word, candidate) / candidate.length)
+    .take(5)
+    .value();
 
   const levenshtein = (a,b) => {
     const M = new Array(a.length * b.length);
@@ -119,5 +117,5 @@ const byteword = (() => {
     return M[a.length*b.length-1];
   };
 
-  return {read, readByte, write, writeByte, levenshtein};
+  return {read, readByte, write, writeByte, levenshtein, closest};
 })();

@@ -19,6 +19,11 @@ prefix-free code, then compressed into bytes using that code.
 
 <table id="code"></table>
 
-The compression statistics do not count the description of the code itself, which
-must also be transmitted as part of the text. The code is here shown as a JSON tree;
-the shortest practical encoding would actually be only twice the alphabet size.
+The compression statistics include the description of the Huffman tree itself.
+The tree here is represented as a preorder traversal, with the internal node
+symbol defaulting to `~` (thus `~a~bc` stands for encoding a, b, c as 0, 10,
+and 11 respectively). This encoding is `2N-1` characters for an alphabet of size N,
+as there are always `N-1` internal nodes in the tree.
+
+The first four bytes of the output are a length header, which ensures that overhang
+bits are discarded while decoding.

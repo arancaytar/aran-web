@@ -26,7 +26,7 @@ const ui = (($, $$) => {
   const options = {'raw': 'Raw'};
   const formats = {};
   formats.raw = {
-    decode: string => Array.from(string).map(char => char.codePointAt()),
+    decode: string => _.chain(string).map(char => char.codePointAt()),
     encode: chars => chars.map(char => String.fromCodePoint(char)).join(''),
   };
   formats.codepoints = {
@@ -72,10 +72,21 @@ const ui = (($, $$) => {
     return bytes;
   };
 
-  readBytes[2] = input => util.getChunks(8, stripDown(/[^01]/g, input)).map(s => parseInt(s, 2));
-  readBytes[8] = input => util.getChunks(3, stripDown(/[^0-7]/g, input)).map(s => parseInt(s, 8));
-  readBytes[10] = input => stripDown(/[^0-9\s]/g, input, false).split(/\s+/).map(s => parseInt(s));
-  readBytes[16] = input => util.getChunks(2, stripDown(/[^0-9a-f]/g, input.toLowerCase())).map(s => parseInt(s, 16));
+  readBytes[2] = input => _.chain(stripDown(/[^01]/g, input))
+    .chunk(8)
+    .map(s => parseInt(s.join(''), 2))
+    .value();
+  readBytes[8] = input => _.chain(stripDown(/[^0-7]/g, input))
+    .chunk(3)
+    .map(s => parseInt(s.join(''), 8))
+    .value();
+  readBytes[10] = input => stripDown(/[^0-9\s]/g, input, false)
+    .split(/\s+/)
+    .map(s => parseInt(s));
+  readBytes[16] = input => _.chain(stripDown(/[^0-9a-f]/g, input.toLowerCase()))
+    .chunk(2)
+    .map(s => parseInt(s.join(''), 16))
+    .value();
   readBytes[64] = base64.read;
   readBytes[256] = byteword.read;
 
@@ -120,73 +131,80 @@ const ui = (($, $$) => {
   };
 
   readChars.utf16 = bytes => {
-    const bytes2 = util.getChunks(2, bytes).map(([a,b]) => a << 8 | b);
-    let i = 0;
+    const bytes2 = _.chain(bytes)
+      .chunk(2)
+      .map(([a,b]) => a << 8 | b)
+      .value();
     const chars = [];
-    while (i < bytes2.length) {
+    for (let i = 0; i < bytes2.length; ++i) {
       if (bytes2[i] >= 0xd800 && bytes2[i] < 0xdc00 && bytes2[i+1] >= 0xdc00 && bytes2[i+1] < 0xe000) {
-        const high = bytes2[i++] & 0x3ff;
-        const low = bytes2[i++] & 0x3ff;
+        const high = bytes2[i] & 0x3ff;
+        const low = bytes2[++i] & 0x3ff;
         chars.push(((high << 10) | low) + 0x10000);
       }
       else {
-        chars.push(bytes2[i++]);
+        chars.push(bytes2[i]);
       }
     }
     return chars;
   };
-  readChars.utf32 = bytes => util.getChunks(4, bytes)
-    .map(([a,b,c,d]) => (a << 24) + (b << 16) + (c << 8) + d);
+  readChars.utf32 = bytes => _.chain(bytes)
+    .chunk(4)
+    .map(([a,b=0,c=0,d=0]) => (a << 24) + (b << 16) + (c << 8) + d)
+    .value();
 
   const writeBytes = [];
   const l = {2: 8, 8: 3, 10: 1, 16: 2};
-  for (let i of [2, 8, 10, 16]) writeBytes[i] = s => s.map(b => b.toString(i).padStart(l[i], '0')).join(' ');
+  for (let i of [2, 8, 10, 16]) writeBytes[i] = s => _.chain(s)
+    .map(b => b.toString(i).padStart(l[i], '0'))
+    .join(' ')
+    .value();
   writeBytes[64] = base64.write;
   writeBytes[256] = byteword.write;
 
   const toBytes = {};
-  toBytes.utf8 = chars => [].concat(...
-    chars.map(char =>
-      (char < 0x7f) ? [char]
-    : (char < 0x800) ? [0xc0 | (char >> 6), 0x80 | (0x3f & char)]
-    : (char < 0x10000) ? [
-        0xe0 | (char >> 12),
-        0x80 | (0x3f & (char >> 6)),
-        0x80 | (0x3f & char)
-      ]
-    :
-      [
-        0xf0 | (char >> 18),
-        0x80 | (0x3f & (char >> 12)),
-        0x80 | (0x3f & (char >> 6)),
-        0x80 | (0x3f & char)
-      ]
+  toBytes.utf8 = chars => _.chain(chars)
+    .map(char =>
+        (char < 0x7f) ? [char]
+      : (char < 0x800) ? [0xc0 | (char >> 6), 0x80 | (0x3f & char)]
+      : (char < 0x10000) ? [
+          0xe0 | (char >> 12),
+          0x80 | (0x3f & (char >> 6)),
+          0x80 | (0x3f & char)
+        ]
+      :
+        [
+          0xf0 | (char >> 18),
+          0x80 | (0x3f & (char >> 12)),
+          0x80 | (0x3f & (char >> 6)),
+          0x80 | (0x3f & char)
+        ]
     )
-  );
-  toBytes.utf16 = chars => [].concat(...
-    chars.map(char => {
-      if (char < 0x10000) {
-        return [char >> 8, char & 0xff];
-      }
-      else {
-        const char2 = char - 0x10000;
-        const high = (char2 >> 10) | 0xd800;
-        const low = (char2 & 0x3ff) | 0xdc00;
-        return [
-          high >> 8, high & 0xff,
-          low >> 8, low & 0xff
-        ];
-      }
+    .flatten()
+    .value();
+  toBytes.utf16 = chars => _.chain(chars)
+    .map(char => {
+      if (char < 0x10000) return [char >> 8, char & 0xff];
+
+      const char2 = char - 0x10000;
+      const high = (char2 >> 10) | 0xd800;
+      const low = (char2 & 0x3ff) | 0xdc00;
+      return [
+        high >> 8, high & 0xff,
+        low >> 8, low & 0xff
+      ];
     })
-  );
-  toBytes.utf32 = chars => [].concat(...
-    chars.map(char => [
+    .flatten()
+    .value();
+  toBytes.utf32 = chars => _.chain(chars)
+    .map(char => [
       char >> 24,
       (char >> 16) & 0xff,
       (char >> 8) & 0xff,
       char & 0xff
     ])
-  );
+    .flatten()
+    .value();
 
   for (let option in options) {
     const html = `<option value="${option}">${options[option]}</option>`;

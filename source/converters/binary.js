@@ -8,10 +8,10 @@ const ui = (($, base64) => {
   };
 
   const printable_ascii = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c';
-  const is_printable = [];
-  for (let i in printable_ascii) {
-    is_printable[printable_ascii[i].charCodeAt()] = true;
-  }
+  const is_printable = _.chain(printable_ascii)
+    .map(c => [c.codePointAt(), true])
+    .fromPairs()
+    .value();
 
   const representations = {
     ascii: {
@@ -142,12 +142,13 @@ const ui = (($, base64) => {
       dom.output.innerHTML = `<span class="error">${e}</span>`;
     }
   };
-
-  for (let i in representations) {
-    const html = `<option value="${i}">${representations[i].label}</option>`;
-    if (representations[i].read) dom.source.insertAdjacentHTML('beforeend', html);
-    if (representations[i].write) dom.target.insertAdjacentHTML('beforeend', html);
-  }
+  _.chain(representations)
+    .forEach((rep, i) => {
+      const html = `<option value="${i}">${rep.label}</option>`;
+      if (rep.read) dom.source.insertAdjacentHTML('beforeend', html);
+      if (rep.write) dom.target.insertAdjacentHTML('beforeend', html);
+    })
+    .value();
 
   dom.source.oninput = dom.target.oninput = dom.input.oninput = dom.type.oninput = run;
 

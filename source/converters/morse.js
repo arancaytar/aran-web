@@ -54,18 +54,16 @@ const ui = (($,$$) => {
     mode: $('#mode').children,
   };
 
-  const reverse_morse = {};
-  for (let key in morse) {
-    reverse_morse[morse[key]] = key;
-  }
+  const reverse_morse = _.invert(morse);
 
-  const toMorse = text => Array
-    .from(text.replace(/\s+/g, ' ').toUpperCase())
-    .map(c => morse[c] || '')
-    .filter(c => c)
-    .join(' ');
+  const toMorse = text => _.chain(text.toUpperCase())
+    .replace(/\s+/g, ' ')
+    .map(c => morse[c])
+    .compact()
+    .join(' ')
+    .value();
 
-  const fromMorse = morse => morse
+  const fromMorse = morse => _.chain(morse)
     .split(/\s+/)
     .map(c => reverse_morse[c] || `[bad code ${c} ]`)
     .join('');

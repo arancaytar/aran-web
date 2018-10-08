@@ -24,7 +24,7 @@ of their satellites:
 ## Contact
 
 - I can be reached by email at [aran@ermarian.net](mailto: Aran <aran@ermarian.net>).
-  (I used to recommend my PGP key ([`0xE9B3CEC3`](/about/pgp.txt)) at this point,
+  (I used to recommend my PGP key ([`0x53EF6955`](/about/pgp.txt)) at this point,
   but frankly I am no longer convinced it's a [worthwhile security measure](/about/security).)
 - I am active on Twitter as [@arancaytar](https://twitter.com/arancaytar).
 - I have a GitHub account at [@arancaytar](https://github.com/arancaytar), but

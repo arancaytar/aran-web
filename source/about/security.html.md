@@ -1,13 +1,9 @@
 ---
 title: Security
 ---
-I used to have a PGP key and occasionally signed outgoing emails,
-when it was convenient because I was on my laptop and using the
-desktop email client.
-
-In practice, I will usually be on my phone or in the
-web mail interface, where it is inconvenient to use PGP. Whether or not my
-emails are signed is therefore not a good test for authenticity.
+I have a PGP key ([0x53ef6955](pgp.txt)) and used to occasionally sign
+outgoing emails. However, I do not have the infrastructure to securely use this
+key on a mobile device, which is how I send and receive nearly all emails.
 
 I recommend that, if you are in doubt as to any message received from me, or
 want to communicate securely, you attempt to reach me through another channel

@@ -13,14 +13,14 @@ const ui = (($, wordsOriginal) => {
   };
   const state = {
     passwords: [],
-  }
+  };
 
   const random = k => Array.from(window.crypto.getRandomValues(new Uint32Array(k))).map(x => x / 2**32);
 
   const arrayRands = (arr, k) => random(k).map(x => arr[Math.floor(x * arr.length)]);
 
   const password = k => arrayRands(words, k);
-  const passwords = (k, n) => Array(n).fill(0).map(_ => password(k));
+  const passwords = (k, n) => Array(n).fill(0).map(() => password(k));
 
   const setWordList = avoid => {
     const avoidLetters = avoid.toLowerCase().split('');
@@ -29,7 +29,7 @@ const ui = (($, wordsOriginal) => {
         letter => !word.includes(letter)
       ))(word.toLowerCase())
     );
-  }
+  };
 
   const update = () => {
     dom.output.innerHTML = '';
@@ -37,7 +37,7 @@ const ui = (($, wordsOriginal) => {
       p => {
           const x = document.createElement('p');
           x.innerText = p.map(
-              dom.cap.checked ? word => word.charAt().toUpperCase() + word.slice(1)
+              dom.cap.checked ? word => word.charAt(0).toUpperCase() + word.slice(1)
                   : word => word.toLowerCase()
           ).join(dom.delimiter.value);
           x.onclick = () => {
@@ -62,7 +62,7 @@ const ui = (($, wordsOriginal) => {
       state.passwords = [];
     }
     update();
-  }
+  };
 
   dom.delimiter.oninput = dom.cap.onchange = update;
   dom.regenerate.onclick = dom.count.oninput = dom.length.oninput = dom.avoid.oninput = regenerate;

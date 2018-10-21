@@ -21,6 +21,7 @@ const ui = (($, wordsOriginal) => {
     range.selectNode(element);
     selection.removeAllRanges();
     selection.addRange(range);
+    document.execCommand('copy');
   };
 
   const random = k => Array.from(window.crypto.getRandomValues(new Uint32Array(k))).map(x => x / 2**32);

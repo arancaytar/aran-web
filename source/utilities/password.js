@@ -15,6 +15,14 @@ const ui = (($, wordsOriginal) => {
     passwords: [],
   };
 
+  const select = element => {
+    const range = document.createRange();
+    const selection = document.getSelection();
+    range.selectNode(element);
+    selection.removeAllRanges();
+    selection.addRange(range);
+  };
+
   const random = k => Array.from(window.crypto.getRandomValues(new Uint32Array(k))).map(x => x / 2**32);
 
   const arrayRands = (arr, k) => random(k).map(x => arr[Math.floor(x * arr.length)]);
@@ -41,8 +49,7 @@ const ui = (($, wordsOriginal) => {
                   : word => word.toLowerCase()
           ).join(dom.delimiter.value);
           x.onclick = () => {
-            x.select();
-            document.execCommand('copy');
+            select(x);
           };
           dom.output.appendChild(x);
       }

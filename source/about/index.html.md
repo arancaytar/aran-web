@@ -1,7 +1,8 @@
 ---
 title: About
 ---
-I'm Aran, also known as Arancaytar. I do a lot of stuff with websites,
+I'm Aran, previously known as Arancaytar. My pronouns are they/them.
+I do a lot of stuff with websites,
 mostly using [PHP](https://php.net/) and [Drupal](https://www.drupal.org/).
 I currently live and work in Zurich, Switzerland, and have previously spent most
 of my life in Germany (studying in Aachen, Frankfurt and Berlin).
@@ -20,6 +21,7 @@ of their satellites:
 - Logic and computational complexity, my main focus while studying computer science.
 - I'm trying to pick up the basics of Machine Learning.
 - [Ponies](https://www.fimfiction.net/).
+- Overwatch.
 
 ## Contact
 
@@ -27,5 +29,4 @@ of their satellites:
   (I used to recommend my PGP key ([`0x53EF6955`](/about/pgp.txt)) at this point,
   but frankly I am no longer convinced it's a [worthwhile security measure](/about/security).)
 - I am active on Twitter as [@arancaytar](https://twitter.com/arancaytar).
-- I have a GitHub account at [@arancaytar](https://github.com/arancaytar), but
-  as most of my dev work so far has been under another identity, it's very empty.
+- Some of my code is published on GitHub as [@arancaytar](https://github.com/arancaytar).

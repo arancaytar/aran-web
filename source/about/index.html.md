@@ -4,7 +4,7 @@ title: About
 I'm Aran, previously known as Arancaytar. My pronouns are they/them.
 I do a lot of stuff with websites,
 mostly using [PHP](https://php.net/) and [Drupal](https://www.drupal.org/).
-I currently live and work in Zurich, Switzerland, and have previously spent most
+I currently live and study in Zurich, Switzerland, and have previously spent most
 of my life in Germany (studying in Aachen, Frankfurt and Berlin).
 
 I have been (or still am) active in the following online communities, and some

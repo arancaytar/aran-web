@@ -26,7 +26,7 @@ const ui = (($, $$) => {
   const options = {'raw': 'Raw'};
   const formats = {};
   formats.raw = {
-    decode: string => _.chain(string).map(char => char.codePointAt()),
+    decode: string => Array.from(decodeUtf16(_.chain(string).map(char => char.codePointAt()).value())),
     encode: chars => chars.map(char => String.fromCodePoint(char)).join(''),
   };
   formats.codepoints = {
@@ -70,6 +70,23 @@ const ui = (($, $$) => {
     const badBytes = bytes.filter(byte => byte < 0 || byte > 255);
     if (badBytes[0]) throw `Bad byte 0x${badBytes[0].toString(16)}`;
     return bytes;
+  };
+
+  const decodeUtf16 = function*(chars) {
+    let high = null;
+    for (let char of chars) {
+      if (0xd800 <= char && char < 0xdc00) {
+        if (high != null) throw `Invalid surrogate pair ${high} ${char}.`;
+        high = char;
+      }
+      else if (0xdc00 <= char && char < 0xe000) {
+        if (high == null) throw `Invalid low surrogate ${char}.`;
+        yield ((high & 0x3ff) << 10) | (char & 0x3ff) | 0x10000;
+        high = null;
+      }
+      else if (high) throw `Invalid high surrogate ${char}.`;
+      else yield char;
+    }
   };
 
   readBytes[2] = input => _.chain(stripDown(/[^01]/g, input))

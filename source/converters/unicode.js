@@ -229,7 +229,7 @@ const ui = (($, $$) => {
     dom.target.insertAdjacentHTML('beforeend', html);
   }
   for (let base in bases) {
-    const html = `<option value="${base}"${base==16 ? ' selected'="selected"' : ""}>${bases[base]}</option>`;
+    const html = `<option value="${base}"${base==16 ? ' selected="selected"' : ""}>${bases[base]}</option>`;
     dom.source_base.insertAdjacentHTML('beforeend', html);
     dom.target_base.insertAdjacentHTML('beforeend', html);
   }

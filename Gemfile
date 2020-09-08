@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'middleman', '~> 4.2'
-gem 'activesupport', '< 5.0.0'
 gem 'middleman-blog', '~> 4.0'
 gem 'builder', '~> 3.0'
 gem 'middleman-autoprefixer', '~> 2.7'

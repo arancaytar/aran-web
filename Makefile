@@ -12,3 +12,6 @@ server:
 
 deploy: all
 	rsync -avz --delete build/ ${TARGET}
+
+clean:
+	rm -rf vendor build bin .bundle .cache

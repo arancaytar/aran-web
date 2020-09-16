@@ -92,7 +92,8 @@ const ui = ($ => {
   const updateFromSlider = () => {
     const knob = dom.svg.knob;
     const [x, y] = readCoords(knob.getAttribute('cx'), knob.getAttribute('cy'));
-    update(x, y);
+    const r = Math.max(polar.radius.value, 0.001);
+    update(r * x, r * y);
   }
 
   cartesian.x.oninput = cartesian.y.oninput =

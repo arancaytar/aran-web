@@ -1,7 +1,7 @@
 ---
 title: About
 ---
-I'm Aran, previously known as Arancaytar. My pronouns are they/them.
+I'm Aran, previously known as Arancaytar. My pronouns are they or she.
 I do a lot of stuff with websites,
 mostly using [PHP](https://php.net/) and [Drupal](https://www.drupal.org/).
 I currently live and study in Zurich, Switzerland, and have previously spent most
@@ -20,8 +20,8 @@ of their satellites:
   but I've dabbled in Java, JS and Haskell, and occasionally touched Lua and Ruby.
 - Logic and computational complexity, my main focus while studying computer science.
 - I'm trying to pick up the basics of Machine Learning.
+- Overwatch, StarCraft 2, Factorio.
 - [Ponies](https://www.fimfiction.net/).
-- Overwatch.
 
 ## Contact
 

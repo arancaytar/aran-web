@@ -1,39 +1,10 @@
-const speed_assemblers = {
-	"Assembling machine 1": 0.5,
-	"Assembling machine 2": 0.75,
-	"Assembling machine 3": 1.25,
-	"Stone furnace": 1,
-	"Steel furnace": 2,
-	"Electric furnace": 2
-}
-
-const speed_modules = {
-	"Speed module 1": 0.2,
-	"Speed module 2": 0.3,
-	"Speed module 3": 0.5
-};
-
-const speed_belts = {
-	"Transport belt": 15,
-	"Fast transport belt": 30,
-	"Express transport belt": 45
-}
-
 const calculator = {
-	speed: (duration, items, assembler, modules) => {
-		let bonus = 0;
-		for (let i in modules) {
-			bonus += modules[i] * speed_modules[i];
-		}
-		return speed_assemblers[assembler] * (1+bonus) * items / duration;
+	speed: (duration, items, crafter, bonus) => {
+		return crafter * (1+bonus/100) * items / duration;
 	},
 
-	capacity: (belts) => {
-		let cap = 0;
-		for (let i in belts) {
-			cap += belts[i] * speed_belts[i];
-		}
-		return cap;
+	capacity: (belt, belt_count) => {
+		return belt * belt_count;
 	}
 	
 }
@@ -44,17 +15,10 @@ const ui = (($,$$) => {
 			return {
 				duration: $('#duration').value,
 				items: $('#items').value,
-				assembler: $('#assembler').value,
-				modules: {
-					"Speed module 1": $('#speed-1').value,
-					"Speed module 2": $('#speed-2').value,
-					"Speed module 3": $('#speed-3').value
-				},
-				belts: {
-					"Transport belt": $('#belt-1').value,
-					"Fast transport belt": $('#belt-2').value,
-					"Express transport belt": $('#belt-3').value
-				}
+				crafter: $('#crafter-preset').value || $('#crafter-custom').value,
+				modules: $('#modules-preset').value || $('#modules-custom').value,
+				belt: $('#belt-preset').value || $('#belt-custom').value,
+				belt_count: $('#belt-count').value,
 			};
 		},
 		
@@ -72,11 +36,21 @@ const ui = (($,$$) => {
 			$('#output-capacity').innerText = ui.format_number(capacity);
 			$('#output-optimal').innerText = ui.format_optimal(speed, capacity);
 		},
+
+		update_presets: (crafter, modules, belt) => {
+			$('#crafter-custom').value = crafter;
+			$('#modules-custom').value = modules;
+			$('#belt-custom').value = belt;
+			$('#crafter-custom').disabled = $('#crafter-preset').value !== '';
+			$('#modules-custom').disabled = $('#modules-preset').value !== '';
+			$('#belt-custom').disabled = $('#belt-preset').value !== '';
+		},
 		
 		update: () => {
 			const request = ui.read_form();
-			const speed = calculator.speed(request.duration, request.items, request.assembler, request.modules);
-			const capacity = calculator.capacity(request.belts);
+			const speed = calculator.speed(request.duration, request.items, request.crafter, request.modules);
+			const capacity = calculator.capacity(request.belt, request.belt_count);
+			ui.update_presets(request.crafter, request.modules, request.belt);
 			ui.write_output(speed, capacity);
 		}
 	};

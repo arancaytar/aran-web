@@ -93,15 +93,18 @@ const HexGrid = class {
 
   mapToCell([cx, cy], size, [px, py]) {
     const dx = px - cx;
-    const dy = px - cy;
-    const x = (dx * sqrt(3)/3 - dy / 3) / size;
-    const z = dy * 2/3 / size;
-    const y = -x-z;
+    const dy = py - cy;
+    const height = 2*size;
+    const width = Math.sqrt(3)/2 * height;
+
+    const y = dy/height/0.75;
+    const x = dx/width-y/2;
+    const z = -x-y;
 
     let [rx, ry, rz] = [Math.round(x), Math.round(y), Math.round(z)];
 
     if (rx+ry+rz !== 0) {
-      const dr = [Math.abs(r[0]-x), Math.abs(r[1]-y), Math.round(r[2]-z)];
+      const dr = [Math.abs(rx-x), Math.abs(ry-y), Math.round(rz-z)];
       const m = Math.max(...dr);
       if (m === dr[0]) {
         rx = -ry-rz;
@@ -113,6 +116,7 @@ const HexGrid = class {
         rz = -rx-ry;
       }
     }
+
     return [rx, ry, rz];
   }
 

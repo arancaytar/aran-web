@@ -22,7 +22,6 @@ for (let control in controls) {
     }
 }
 
-let game;
 const functions = {
     start: () => {
         if (!simulator) simulator = functions.init();
@@ -56,7 +55,7 @@ const functions = {
 
     reset: () => {
       //permUrl.href = `?${encodeQueryData(controls)}`;
-      if (game) game.stop();
+      if (simulator && simulator.game) simulator.game.stop();
       ctx.clearRect(0, 0, canv.width, canv.height);
       const cellsize = controls.size.value > 20 ? (controls.size.value > 50 ? 3 : 5) : 10;
       simulator = functions.init();

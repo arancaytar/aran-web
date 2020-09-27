@@ -71,6 +71,7 @@ const functions = {
         game.board.set(...cell, Math.floor(Math.random()*2));
       }
       const cellsize = functions.getSize();
+      canv.onclick = functions.click;
       return new Simulator(game, () => {
         simulator.game.board.draw(ctx, cellsize, [canv.width/2, canv.height/2], color);
       }).onStop(() => {
@@ -78,6 +79,14 @@ const functions = {
         controls.stop.disabled = true;
         controls.step.disabled = false;
       })
+    },
+
+    click: ({offsetX, offsetY}) => {
+      const board = simulator.game.board;
+      const [px, py] = [offsetX - canv.width/2, offsetY - canv.height/2];
+      const [cx, cy, cz] = board.mapToCell(board.mapCell(0, 0, 0), functions.getSize(), [px, py]);
+      board.set(cx, cy, cz, +!board.get(cx, cy, cz));
+      simulator.draw();
     },
 
     getSize: () => {

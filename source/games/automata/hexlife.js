@@ -57,7 +57,7 @@ const functions = {
       //permUrl.href = `?${encodeQueryData(controls)}`;
       if (simulator && simulator.game) simulator.game.stop();
       ctx.clearRect(0, 0, canv.width, canv.height);
-      const cellsize = controls.size.value > 20 ? (controls.size.value > 50 ? 3 : 5) : 10;
+      const cellsize = functions.getSize();
       simulator = functions.init();
       canv.width = controls.size.value * cellsize * 3.5;
       canv.height = controls.size.value * cellsize * 3.5;
@@ -70,7 +70,7 @@ const functions = {
       for (let cell of game.board.getCells()) {
         game.board.set(...cell, Math.floor(Math.random()*2));
       }
-      const cellsize = controls.size.value > 20 ? (controls.size.value > 50 ? 3 : 5) : 10;
+      const cellsize = functions.getSize();
       return new Simulator(game, () => {
         simulator.game.board.draw(ctx, cellsize, [canv.width/2, canv.height/2], color);
       }).onStop(() => {
@@ -78,6 +78,10 @@ const functions = {
         controls.stop.disabled = true;
         controls.step.disabled = false;
       })
+    },
+
+    getSize: () => {
+      return controls.size.value > 20 ? (controls.size.value > 50 ? 3 : 5) : 10;
     }
 };
 

@@ -55,7 +55,7 @@ const functions = {
 
     reset: () => {
       //permUrl.href = `?${encodeQueryData(controls)}`;
-      if (simulator && simulator.game) simulator.game.stop();
+      functions.stop();
       ctx.clearRect(0, 0, canv.width, canv.height);
       const cellsize = functions.getSize();
       simulator = functions.init();

@@ -23,7 +23,7 @@ const ui = (($, $$) => {
     256: byteword,
   };
 
-  const options = {'raw': 'Raw'};
+  const options = {'raw': 'Raw', 'punycode': 'Punycode'};
   const formats = {};
   formats.raw = {
     decode: string => Array.from(decodeUtf16(_.chain(string).map(char => char.codePointAt()).value())),
@@ -34,6 +34,103 @@ const ui = (($, $$) => {
       .split(/\s+/)
       .map(char => parseInt(char, base))),
     encode: (chars, base) => chars.map(char => char.toString(base)).join(' '),
+  };
+  formats.punycode = {
+    _adapt: (delta, numpoints, firsttime) => {
+      delta = Math.floor(delta / (firsttime ? 700 : 2));
+      delta += Math.floor(delta / numpoints);
+      // (base - tmin) * tmax div 2 === (36 - 1) * 26 div 2 === 35 * 13 === 455
+      let k = 0;
+      while (delta > 455) {
+        delta = Math.floor(delta / 35);
+        k += 36
+      }
+      return k + Math.floor(36 * delta / (delta + 38));
+    },
+
+    /**
+     * @param {string} string
+     */
+    decode: string => {
+      const delim = string.lastIndexOf('-');
+      let output = Array.from(decodeUtf16(_.chain(string.substring(0, delim)).map(char => char.charCodeAt())));
+      for (let i in output) {
+        if (output[i] > 0x7f) throw `Non-ASCII character at #${i}: ${String.fromCodePoint(output[i])}`;
+      }
+      let extension = Array.from(_.chain(string.substring(delim+1).toLowerCase()).map(x => x.charCodeAt()));
+
+      let n = 128, i = 0, bias = 72, w = 1, k = 36, old_i = 0;
+
+      for (let digit of extension) {
+        const value = digit - ((digit > 96) ? 97 : 22);
+        if (value < 0 || value > 35) throw `Invalid digit: ${String.fromCodePoint(digit)} = ${value}`;
+        i += value * w;
+        const t = Math.min(26, Math.max(1, k - bias));
+        if (value < t) {
+          const l = output.length + 1;
+          bias = formats.punycode._adapt(i - old_i, l, old_i === 0);
+          n += Math.floor(i / l);
+          i %= l;
+          output.splice(i, 0, n);
+          k = 36;
+          i += 1;
+          w = 1;
+          old_i = i;
+        }
+        else {
+          w *= 36 - t;
+          k += 36
+        }
+      }
+      return output;
+    },
+
+    /**
+     * @param {number[]} chars
+     */
+    encode: chars => {
+      let sorted = chars.filter(a => a >= 128).sort((a, b) => Math.sign(a - b));
+      const findmin = () => {
+        let target = sorted[0];
+        let i = 0;
+        for (let c of sorted) {
+          if (c > target) break;
+          else i++;
+        }
+        sorted = sorted.slice(i);
+        return target;
+      }
+      const digit = i => String.fromCodePoint(i + (i <= 25 ? 97 : 22));
+
+      let n = 128, delta = 0, i = 0, bias = 72;
+      let output = chars.filter(x => x < 128).map(c => String.fromCodePoint(c)).join("");
+      let h = output.length, b = h;
+      if (output.length) output += '-';
+      while (h < chars.length) {
+        let m = findmin();
+        delta += (m - n) * (h + 1);
+        n = m;
+        for (let c of chars) {
+          if (c < n) delta++;
+          else if (c === n) {
+            let q = delta;
+            for (let k = 36 ;; k += 36) {
+              const t = Math.min(26, Math.max(1, k - bias));
+              if (q < t) break;
+              output += digit(t + (q - t) % (36 - t));
+              q = Math.floor((q - t) / (36 - t));
+            }
+            output += digit(q);
+            bias = formats.punycode._adapt(delta, h + 1, h === b);
+            delta = 0;
+            h++;
+          }
+        }
+        n++;
+        delta++;
+      }
+      return output;
+    },
   };
 
   const assertUnicode = chars => {

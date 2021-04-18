@@ -27,6 +27,8 @@ This is a near-universal converter for various Unicode encodings.
 - [UTF-32 / UCS-4](https://en.wikipedia.org/wiki/UTF-32): A fixed-length
   encoding that produces 4 bytes per character.
 - Codepoints: The codepoint of each character, separated by spaces.
+- [Punycode](https://en.wikipedia.org/wiki/Punycode): An ASCII representation of Unicode
+  used in internet hostnames, defined by [RFC-3492](https://tools.ietf.org/html/rfc3492).
 
 The *Raw* format simply prints the string as it should be represented. Note that
 most valid code points are either unassigned or do not have a glyph in the

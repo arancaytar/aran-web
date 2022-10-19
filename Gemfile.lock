@@ -79,10 +79,10 @@ GEM
       toml
       uglifier (~> 3.0)
       webrick
-    mini_portile2 (2.7.1)
+    mini_portile2 (2.8.0)
     minitest (5.15.0)
-    nokogiri (1.13.1)
-      mini_portile2 (~> 2.7.0)
+    nokogiri (1.13.9)
+      mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
     padrino-helpers (0.15.1)
       i18n (>= 0.6.7, < 2)

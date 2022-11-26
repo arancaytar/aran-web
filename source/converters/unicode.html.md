@@ -29,6 +29,8 @@ This is a near-universal converter for various Unicode encodings.
 - Codepoints: The codepoint of each character, separated by spaces.
 - [Punycode](https://en.wikipedia.org/wiki/Punycode): An ASCII representation of Unicode
   used in internet hostnames, defined by [RFC-3492](https://tools.ietf.org/html/rfc3492).
+  Note that the `xn--` prefix of internationalized domain names is *not* part of Punycode
+  and must be omitted when decoding.
 
 The *Raw* format simply prints the string as it should be represented. Note that
 most valid code points are either unassigned or do not have a glyph in the
